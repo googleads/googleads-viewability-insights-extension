@@ -1,0 +1,19 @@
+{
+  "name": "Ad Manager Viewability Insights",
+  "description": "A DevTools extension for inspecting the viewability of Ad Manager Ads",
+  "version": "0.0.1",
+  "manifest_version": 3,
+  "permissions": ["scripting", "activeTab", "tabs"],
+  "devtools_page": "devtools_page.html",
+  "background": {},
+  "action": {},
+  "host_permissions": ["<all_urls>"],
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content_script.js"],
+      "run_at": "document_start",
+      "all_frames": false
+    }
+  ]
+}

@@ -1,0 +1,116 @@
+/**
+ * @license Copyright 2022 Google LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+body {
+  display: flex;
+  flex-flow: column;
+  font-family: "Segoe UI", Tahoma, sans-serif;
+  font-size: 12px;
+  height: 100vh;
+  margin: 0;
+  overflow: hidden;
+  padding: 0;
+}
+
+#button-enable-viewability-insights {
+  border: 1px solid #777;
+  background: #9e9e9e;
+  border-radius: 50%;
+  filter: drop-shadow(1px 1px 1px rgba(0, 0, 0, 0.3));
+  height: 18px;
+  margin: 4px 5px;
+  width: 18px;
+}
+
+#button-enable-viewability-insights:hover {
+  background: #607d8b;
+}
+
+#button-enable-viewability-insights.active {
+  background: #f44336;
+}
+
+#icon-connect-status::before {
+  content: 'wifi_tethering_off'
+}
+
+#icon-connect-status.connected::before {
+  content: 'wifi_tethering'
+}
+
+#report td {
+  border-bottom: 1px solid #f2f2f2;
+  padding: 2px;
+}
+
+.viewability-toolbar-container,
+.viewability-statusbar-container {
+  display: flex;
+  flex: 0 0 auto;
+  height: 27px;
+}
+
+.viewability-toolbar-container > :first-child,
+.viewability-statusbar-container > :first-child {
+  flex: 1 1 auto;
+}
+
+.toolbar {
+  background-color: rgb(241, 243, 244);
+  border-bottom: 1px solid rgb(202, 205, 209);
+  display: flex;
+  line-height: 27px;
+}
+
+.statusbar {
+  background-color: rgb(241, 243, 244);
+  border-top: 1px solid rgb(202, 205, 209);
+  display: flex;
+  line-height: 27px;
+}
+
+.toolbar input,
+.statusbar input {
+  vertical-align: middle;
+}
+
+.toolbar-divider,
+.statusbar-divider {
+  background-color: rgb(202, 205, 209) !important;
+  height: 16px;
+  margin: 5px 4px;
+  width: 1px;
+}
+
+.toolbar-item,
+.statusbar-item {
+  align-items: center;
+  background-color: transparent;
+  border: none;
+  display: flex;
+  flex: none;
+  height: 16px;
+  justify-content: center;
+  padding: 0;
+  position: relative;
+  white-space: pre;
+}
+
+.viewability-container {
+  flex-direction: column !important;
+  flex: auto;
+  overflow: auto;
+}
