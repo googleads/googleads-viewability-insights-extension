@@ -14,6 +14,16 @@
  * limitations under the License.
  */
 
+const CellContent = {
+  Slot: 0,
+  AdUnit: 1,
+  LineItem: 2,
+  MinViewability: 3,
+  MaxViewability: 4,
+  CurrentViewability: 5,
+  Viewable: 6,
+};
+
 class Report {
   constructor() {
     this.slots = {};
@@ -43,17 +53,21 @@ class Report {
     const reportTable = document.querySelector("#report > tbody");
     const row = reportTable.insertRow(-1);
     row.id = "row-" + slot.slotElementId;
-    const slotElementIdCell = row.insertCell(0);
+    const slotElementIdCell = row.insertCell(CellContent.Slot);
     slotElementIdCell.innerText = slot.slotElementId;
-    const adUnitPathCell = row.insertCell(1);
+    const adUnitPathCell = row.insertCell(CellContent.AdUnit);
     adUnitPathCell.innerText = slot.adUnitPath;
-    const minViewabilityCell = row.insertCell(2);
+    const lineItemIdCell = row.insertCell(CellContent.LineItem);
+    lineItemIdCell.innerText = slot.lineItemId;
+    const minViewabilityCell = row.insertCell(CellContent.MinViewability);
     minViewabilityCell.innerText = 0;
-    const maxViewabilityCell = row.insertCell(3);
+    const maxViewabilityCell = row.insertCell(CellContent.MaxViewability);
     maxViewabilityCell.innerText = 0;
-    const currentViewabilityCell = row.insertCell(4);
+    const currentViewabilityCell = row.insertCell(
+      CellContent.CurrentViewability
+    );
     currentViewabilityCell.innerText = 0;
-    const viewableCell = row.insertCell(5);
+    const viewableCell = row.insertCell(CellContent.Viewable);
     viewableCell.innerText = false;
   }
 
@@ -63,14 +77,15 @@ class Report {
     }
     const row = document.getElementById("row-" + slot.slotElementId);
     if (typeof slot.visibility != "undefined") {
-      row.cells[4].innerText = slot.visibility;
-      if (slot.visibility > row.cells[3].innerText) {
-        row.cells[3].innerText = slot.visibility;
+      row.cells[CellContent.CurrentViewability].innerText = slot.visibility;
+      if (slot.visibility > row.cells[CellContent.MaxViewability].innerText) {
+        row.cells[CellContent.MaxViewability].innerText = slot.visibility;
       }
     }
     if (typeof slot.viewable != "undefined") {
-      row.cells[5].innerText = slot.viewable;
-      row.cells[2].innerText = row.cells[3].innerText;
+      row.cells[CellContent.Viewable].innerText = slot.viewable;
+      row.cells[CellContent.MinViewability].innerText =
+        row.cells[CellContent.CurrentViewability].innerText;
     }
   }
 }

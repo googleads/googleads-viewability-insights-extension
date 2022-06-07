@@ -61,24 +61,24 @@ export default class ViewabilityInsights {
   }
 
   slotVisibilityChanged(event) {
+    const slotElementId = event.slot.getSlotElementId();
     window.postMessage({
       type: "ads-slot-visibility",
       token: this.token,
       value: {
-        slotElementId: event.slot.getSlotElementId(),
+        slotElementId: slotElementId,
         visibility: event.inViewPercentage,
       },
     });
     if (this.showViewableOverlay) {
-      const slotElementId = event.slot.getSlotElementId();
       this.getOrCreateViewabilityOverlay(slotElementId);
     }
   }
 
   impressionViewable(event) {
     this.viewableImpressionCount++;
+    const slotElementId = event.slot.getSlotElementId();
     if (this.showViewableOverlay) {
-      const slotElementId = event.slot.getSlotElementId();
       const overlay = this.getOrCreateViewabilityOverlay(slotElementId);
       if (overlay) {
         overlay.classList.add("viewable");
@@ -88,7 +88,7 @@ export default class ViewabilityInsights {
       type: "ads-slot-viewable",
       token: this.token,
       value: {
-        slotElementId: event.slot.getSlotElementId(),
+        slotElementId: slotElementId,
         viewable: true,
       },
     });
@@ -104,10 +104,9 @@ export default class ViewabilityInsights {
   }
 
   slotOnload(event) {
-    if (
-      event.slot.getResponseInformation() == null ||
-      event.slot.getSlotElementId() in this.knownAdsSlots
-    ) {
+    const responseInformation = event.slot.getResponseInformation();
+    const slotElementId = event.slot.getSlotElementId();
+    if (responseInformation == null || slotElementId in this.knownAdsSlots) {
       return;
     }
     this.slotOnLoadCount++;
@@ -116,7 +115,8 @@ export default class ViewabilityInsights {
       token: this.token,
       value: {
         adUnitPath: event.slot.getAdUnitPath(),
-        slotElementId: event.slot.getSlotElementId(),
+        slotElementId: slotElementId,
+        lineItemId: responseInformation.lineItemId,
       },
     });
     window.postMessage({
@@ -124,7 +124,18 @@ export default class ViewabilityInsights {
       token: this.token,
       value: this.slotOnLoadCount,
     });
-    this.knownAdsSlots[event.slot.getSlotElementId()] = true;
+    if (this.showViewableOverlay) {
+      this.getOrCreateViewabilityOverlay(slotElementId);
+    }
+    this.knownAdsSlots[slotElementId] = true;
+  }
+
+  getOrCreateViewabilityOverlaySlotInfo(elementId) {
+    const overlay = this.getOrCreateViewabilityOverlay(elementId);
+    if (overlay) {
+      return overlay.querySelector(".slot-info");
+    }
+    return null;
   }
 
   getOrCreateViewabilityOverlay(elementId) {
@@ -133,6 +144,7 @@ export default class ViewabilityInsights {
       return;
     }
 
+    // Early return if overlay already exists.
     const overlayElementId = "viewability-overlay-" + elementId;
     if (document.getElementById(overlayElementId)) {
       return document.getElementById(overlayElementId);
@@ -143,9 +155,17 @@ export default class ViewabilityInsights {
       slotElement.style.position = "relative";
     }
 
+    // Construct element.
     const overlay = document.createElement("div");
     overlay.id = "viewability-overlay-" + elementId;
     overlay.className = "viewability-insights-overlay";
+
+    // Add Slot Info container
+    const slotInfo = document.createElement("span");
+    slotInfo.className = "slot-info";
+    slotInfo.innerText = elementId;
+    overlay.appendChild(slotInfo);
+
     slotElement.appendChild(overlay);
     return overlay;
   }

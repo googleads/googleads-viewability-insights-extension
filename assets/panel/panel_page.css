@@ -44,16 +44,19 @@ body {
 }
 
 #icon-connect-status::before {
-  content: 'wifi_tethering_off'
+  content: "wifi_tethering_off";
 }
 
 #icon-connect-status.connected::before {
-  content: 'wifi_tethering'
+  content: "wifi_tethering";
 }
 
-#report td {
+#report > thead th,
+#report > tbody td {
   border-bottom: 1px solid #f2f2f2;
-  padding: 2px;
+  padding: 1px;
+  padding-right: 16px;
+  padding-left: 16px;
 }
 
 .viewability-toolbar-container,
