@@ -16,15 +16,18 @@
 
 .viewability-insights-overlay {
   align-items: center;
-  bottom: 0;
   box-shadow: inset 0px 0px 0px 10px rgba(255, 0, 0, 0.75);
   display: flex;
-  font-family: Roboto, "Noto Sans";
+  font-family: Roboto, 'Noto Sans';
   font-size: 16px;
   height: 100%;
   justify-content: center;
   left: 0;
+  margin: auto;
   position: absolute;
+  position: absolute;
+  right: 0;
+  top: 0;
   width: 100%;
 }
 
@@ -58,5 +61,5 @@
 }
 
 .viewability-insights-overlay:hover > .slot-info {
-  display: block;  
+  display: block;
 }

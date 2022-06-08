@@ -14,30 +14,43 @@
  * limitations under the License.
  */
 
-import { ScriptHandler } from "./script_handler";
+import { ScriptHandler } from './script_handler';
 
+/**
+ * Main class to handle all toolbar related action and updates.
+ * @class
+ */
 class Toolbar {
+  /**
+   * @constructor
+   */
   constructor() {
     this.enabled = false;
   }
 
+  /**
+   * Add event listener for clickable elements like checkbox.
+   */
   addEventListener() {
     document
-      .querySelector("#button-enable-viewability-insights")
-      .addEventListener("click", this.enableViewabilityInsights.bind(this));
+      .querySelector('#button-enable-viewability-insights')
+      .addEventListener('click', this.enableViewabilityInsights.bind(this));
     document
-      .querySelector("#checkbox-show-viewable-overlay")
-      .addEventListener("change", this.showViewableOverlay.bind(this));
+      .querySelector('#checkbox-show-viewable-overlay')
+      .addEventListener('change', this.showViewableOverlay.bind(this));
     document
-      .querySelector("#checkbox-show-active-view-elements")
-      .addEventListener("change", this.showActiveViewElements.bind(this));
+      .querySelector('#checkbox-show-active-view-elements')
+      .addEventListener('change', this.showActiveViewElements.bind(this));
   }
 
+  /**
+   * @param {*} event
+   */
   enableViewabilityInsights(event) {
     this.enabled = !this.enabled;
-    event.currentTarget.classList.toggle("active");
+    event.currentTarget.classList.toggle('active');
     console.log(
-      "Enable Viewability Insights",
+      'Enable Viewability Insights',
       event.currentTarget,
       this.enabled
     );
@@ -46,17 +59,27 @@ class Toolbar {
     }
   }
 
+  /**
+   * @param {*} event
+   */
   showViewableOverlay(event) {
-    console.log("Show Viewable Overlay", event.currentTarget.checked);
+    console.log('Show Viewable Overlay', event.currentTarget.checked);
     ScriptHandler.enableViewableOverlay(event.currentTarget.checked);
   }
 
+  /**
+   * @param {*} event
+   */
   showActiveViewElements(event) {
-    console.log("Show Active View Elements", event.currentTarget.checked);
+    console.log('Show Active View Elements', event.currentTarget.checked);
   }
 
+  /**
+   * @static
+   * @return {boolean}
+   */
   static shouldShowViewableOverlay() {
-    return document.querySelector("#checkbox-show-viewable-overlay").checked;
+    return document.querySelector('#checkbox-show-viewable-overlay').checked;
   }
 }
 

@@ -1,5 +1,5 @@
 /**
- * @license Copyright 2022 Google LLC
+ * @license Copyright 2022 The Coding with Chrome Authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,20 +14,11 @@
  * limitations under the License.
  */
 
-const { merge } = require('webpack-merge');
-const common = require('./webpack.common.js');
+/** ServiceWorkerWebpackPlugin */
+declare const serviceWorkerOption: Record<string, unknown>;
 
-module.exports = [
-  merge(common.devtoolsPageConfig, {
-    mode: 'production',
-  }),
-  merge(common.panelPageConfig, {
-    mode: 'production',
-  }),
-  merge(common.contentScriptConfig, {
-    mode: 'production',
-  }),
-  merge(common.gptIntegrationScriptConfig, {
-    mode: 'production',
-  }),
-];
+/** Google Publisher Tag (GPT) */
+declare const googletag: any;
+
+/** Injected ViewabilityInsights script */
+declare const ViewabilityInsights: any;

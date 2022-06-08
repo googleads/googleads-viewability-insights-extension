@@ -14,9 +14,20 @@
  * limitations under the License.
  */
 
-import { ScriptHandler } from "./script_handler";
+import { ScriptHandler } from './script_handler';
 
+/**
+ * Handles all messages for the communication between the:
+ * - Panel Page
+ * - Content Script
+ * - Injected Script
+ *
+ * @class
+ */
 class MessageHandler {
+  /**
+   * @constructor
+   */
   constructor() {
     this.port = null;
     this.report = null;
@@ -27,22 +38,41 @@ class MessageHandler {
     this.toolbar = null;
   }
 
+  /**
+   * Adds the message connect event listener to handle all messages.
+   */
   addEventListener() {
     chrome.runtime.onConnect.addListener(this.handleConnect.bind(this));
   }
 
+  /**
+   * Adds toolbar reference for easier access.
+   * @param {Toolbar} toolbar
+   */
   addToolbarReference(toolbar) {
     this.toolbar = toolbar;
   }
 
+  /**
+   * Adds statusbar reference for easier access.
+   * @param {Status} statusbar
+   */
   addStatusbarReference(statusbar) {
     this.statusbar = statusbar;
   }
 
+  /**
+   * Adds report reference for easier access.
+   * @param {Report} report
+   */
   addReportReference(report) {
     this.report = report;
   }
 
+  /**
+   * @param {Port} port
+   * @see https://developer.chrome.com/docs/extensions/reference/runtime/#event-onConnect
+   */
   handleConnect(port) {
     this.port = port;
     this.sender = port.sender;
@@ -54,7 +84,7 @@ class MessageHandler {
     }
 
     // Ignore events from other names.
-    if (port.name != "viewability-insights") {
+    if (port.name != 'viewability-insights') {
       return;
     }
 
@@ -67,34 +97,40 @@ class MessageHandler {
     ScriptHandler.injectScript(this.tabId, this.token);
   }
 
+  /**
+   * @param {function} message
+   * @see https://developer.chrome.com/docs/extensions/reference/runtime/#event-onMessage
+   */
   handleMessage(message) {
     switch (message.type) {
-      case "ads-slot-loaded":
-        this.handleAdsSlotLoaded(message);
+      case 'ads-slot-rendered':
+        this.handleAdsSlotRendered(message);
         break;
-      case "ads-slots-loaded":
+      case 'ads-slot-loaded':
+      case 'ads-slot-viewable':
+      case 'ads-slot-visibility':
+        this.handleReportUpdates(message);
+        break;
+      case 'ads-slots-loaded':
         this.handleAdsSlotsLoaded(message);
         break;
-      case "ads-slot-viewable":
-        this.handleAdsSlotViewable(message);
+      case 'ads-slots-rendered':
+        this.handleAdsSlotsRendered(message);
         break;
-      case "ads-slots-viewable":
+      case 'ads-slots-reloaded':
+        this.handleAdsSlotsReloaded(message);
+        break;
+      case 'ads-slots-viewable':
         this.handleAdsSlotsViewable(message);
         break;
-      case "ads-slot-visibility":
-        this.handleAdsSlotVisibility(message);
-        break;
-      case "init":
+      case 'init':
         this.handleInitMessage(message);
         break;
-      case "status":
-        this.handleStatusMessage(message);
-        break;
-      case "version":
+      case 'version':
         this.handleVersionMessage(message);
         break;
       default:
-        console.warn("Received unhandled message:", message);
+        console.warn('Received unhandled message:', message);
     }
 
     if (this.statusbar) {
@@ -102,38 +138,65 @@ class MessageHandler {
     }
   }
 
-  handleAdsSlotLoaded(message) {
-    if (this.report) {
+  /**
+   * @param {Object} message
+   */
+  handleAdsSlotRendered(message) {
+    if (this.report && message.value) {
       this.report.addSlot(message.value);
     }
   }
 
+  /**
+   * @param {Object} message
+   */
   handleAdsSlotsLoaded(message) {
     if (this.statusbar) {
       this.statusbar.setAdsSlotsLoaded(message.value);
     }
   }
 
-  handleAdsSlotViewable(message) {
-    if (this.report) {
-      this.report.updateSlot(message.value);
+  /**
+   * @param {Object} message
+   */
+  handleAdsSlotsRendered(message) {
+    if (this.statusbar) {
+      this.statusbar.setAdsSlotsRendered(message.value);
     }
   }
 
+  /**
+   * @param {Object} message
+   */
+  handleAdsSlotsReloaded(message) {
+    if (this.statusbar && message.value) {
+      this.statusbar.setAdsSlotsReloaded(message.value);
+    }
+  }
+
+  /**
+   * @param {Object} message
+   */
   handleAdsSlotsViewable(message) {
     if (this.statusbar) {
       this.statusbar.setAdsSlotsViewable(message.value);
     }
   }
 
-  handleAdsSlotVisibility(message) {
-    if (this.report) {
+  /**
+   * @param {Object} message
+   */
+  handleReportUpdates(message) {
+    if (this.report && message.value) {
       this.report.updateSlot(message.value);
     }
   }
 
+  /**
+   * @param {Object} message
+   */
   handleInitMessage(message) {
-    if (message.value == "knock knock") {
+    if (message.value && message.value == 'knock knock') {
       this.connected = true;
       this.port.postMessage({ token: this.token });
       if (this.report) {
@@ -145,16 +208,19 @@ class MessageHandler {
     }
   }
 
-  handleStatusMessage(_message) {
-    // Unused
-  }
-
+  /**
+   * @param {Object} message
+   */
   handleVersionMessage(message) {
     if (this.statusbar) {
       this.statusbar.setGptVersion(message.value);
     }
   }
 
+  /**
+   * @param {string} command
+   * @param {Object} value
+   */
   postCommand(command, value) {
     if (this.port) {
       this.port.postMessage({ command: command, value: value });

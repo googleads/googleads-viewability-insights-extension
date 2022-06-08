@@ -14,24 +14,24 @@
  * limitations under the License.
  */
 
-const { merge } = require("webpack-merge");
-const common = require("./webpack.common.js");
+const { merge } = require('webpack-merge');
+const common = require('./webpack.common.js');
 
 module.exports = [
   merge(common.devtoolsPageConfig, {
-    mode: "development",
-    devtool: "inline-source-map",
+    mode: 'development',
+    devtool: 'inline-source-map',
   }),
   merge(common.panelPageConfig, {
-    mode: "development",
-    devtool: "inline-source-map",
+    mode: 'development',
+    devtool: 'inline-source-map',
   }),
   merge(common.contentScriptConfig, {
-    mode: "development",
-    devtool: "inline-source-map",
+    mode: 'development',
+    devtool: 'inline-source-map',
   }),
   merge(common.gptIntegrationScriptConfig, {
-    mode: "development",
-    devtool: "inline-source-map",
+    mode: 'development',
+    devtool: 'inline-source-map',
   }),
 ];

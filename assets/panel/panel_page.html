@@ -1,12 +1,12 @@
 <!--
  @license Copyright 2022 Google LLC
- 
+
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
- 
+
    http://www.apache.org/licenses/LICENSE-2.0
- 
+
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an "AS IS" BASIS,
  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -21,57 +21,33 @@
   <body>
     <header class="viewability-toolbar-container">
       <div class="toolbar">
-        <button
-          id="button-enable-viewability-insights"
-          class="toolbar-button toolbar-item"
-          title="Enable Viewability Insights"
-        ></button>
+        <button id="button-enable-viewability-insights" class="toolbar-button toolbar-item" title="Enable Viewability Insights"></button>
         <div class="toolbar-divider toolbar-item"></div>
         <span>
-          <input
-            type="checkbox"
-            id="checkbox-show-viewable-overlay"
-            title="Shows viewable overlays (while DevTools is open)"
-            checked
-          />
-          <label
-            class="checkbox-text"
-            for="checkbox-show-viewable-overlay"
-            title="Shows viewable overlays (while DevTools is open)"
-          >
-            Shows Viewable Overlays</label
-          >
+          <input type="checkbox" id="checkbox-show-viewable-overlay" title="Shows viewable overlays (while DevTools is open)" checked />
+          <label class="checkbox-text" for="checkbox-show-viewable-overlay" title="Shows viewable overlays (while DevTools is open)"> Shows Viewable Overlays</label>
         </span>
         <div class="toolbar-divider toolbar-item"></div>
         <span style="display: none">
-          <input
-            type="checkbox"
-            id="checkbox-show-active-view-elements"
-            title="Shows Active View Elements (while DevTools is open)"
-          />
-          <label
-            class="checkbox-text"
-            for="checkbox-show-active-view-elements"
-            title="Shows Active View Elements (while DevTools is open)"
-          >
-            Shows ActiveView Elements</label
-          >
+          <input type="checkbox" id="checkbox-show-active-view-elements" title="Shows Active View Elements (while DevTools is open)" />
+          <label class="checkbox-text" for="checkbox-show-active-view-elements" title="Shows Active View Elements (while DevTools is open)"> Shows ActiveView Elements</label>
         </span>
       </div>
     </header>
     <div class="viewability-container">
-      <h2>Viewability Report</h2>
-      <div id="container"></div>
       <table id="report" aria-describedby="Viewability Report Overview">
         <thead>
           <tr>
-            <th scope="col">Slot</th>
+            <th scope="col">#</th>
+            <th scope="col">Slot Id</th>
             <th scope="col">Ad Unit</th>
+            <th scope="col">Size</th>
             <th scope="col">Line Item ID</th>
             <th scope="col">Min Viewability</th>
             <th scope="col">Max Viewability</th>
             <th scope="col">Current Viewability</th>
             <th scope="col">Viewable</th>
+            <th scope="col">Reloads</th>
           </tr>
         </thead>
         <tbody></tbody>
@@ -83,19 +59,15 @@
         <div class="statusbar-divider toolbar-item"></div>
         <span>GPT Version: <span id="text-gpt-version">-</span></span>
         <div class="statusbar-divider toolbar-item"></div>
-        <span
-          >Ad Slots loaded: <span id="text-num-ads-slots-loaded">0</span></span
-        >
+        <span>Ad Slots rendered: <span id="text-num-ads-slots-rendered">0</span></span>
         <div class="statusbar-divider toolbar-item"></div>
-        <span
-          >Ad Slots viewable:
-          <span id="text-num-ads-slots-visible">0</span></span
-        >
+        <span>Ad Slots loaded: <span id="text-num-ads-slots-loaded">0</span></span>
         <div class="statusbar-divider toolbar-item"></div>
-        <span
-          >Ad Slots Viewability:
-          <span id="text-num-ads-slots-viewability">0.00%</span></span
-        >
+        <span>Ad Slots viewable: <span id="text-num-ads-slots-visible">0</span></span>
+        <div class="statusbar-divider toolbar-item"></div>
+        <span>Ad Slots reloads: <span id="text-num-ads-slots-reload">0</span></span>
+        <div class="statusbar-divider toolbar-item"></div>
+        <span>Ad Slots Viewability: <span id="text-num-ads-slots-viewability">0.00%</span></span>
       </div>
     </footer>
   </body>

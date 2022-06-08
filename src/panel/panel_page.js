@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-import "./../../assets/panel/panel_page.css";
-import "./../../node_modules/@material-design-icons/font";
+import './../../assets/panel/panel_page.css';
+import './../../node_modules/@material-design-icons/font';
 
-import { MessageHandler } from "./message_handler";
-import { Report } from "./report";
-import { Statusbar } from "./statusbar";
-import { Toolbar } from "./toolbar";
+import { MessageHandler } from './message_handler';
+import { Report } from './report';
+import { Statusbar } from './statusbar';
+import { Toolbar } from './toolbar';
 
 const messageHandler = new MessageHandler();
 const report = new Report();
@@ -31,6 +31,6 @@ messageHandler.addStatusbarReference(statusbar);
 messageHandler.addReportReference(report);
 
 messageHandler.addEventListener();
-document.addEventListener("DOMContentLoaded", (_event) => {
+document.addEventListener('DOMContentLoaded', () => {
   toolbar.addEventListener();
 });

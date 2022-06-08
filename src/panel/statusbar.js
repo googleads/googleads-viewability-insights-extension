@@ -14,9 +14,18 @@
  * limitations under the License.
  */
 
+/**
+ * Main class to handle all statusbar related action and updates.
+ * @class
+ */
 class Statusbar {
+  /**
+   * @constructor
+   */
   constructor() {
     this.adsSlotsLoaded = 0;
+    this.adsSlotsReloaded = 0;
+    this.adsSlotsRendered = 0;
     this.adsSlotsViewability = 0;
     this.adsSlotsViewable = 0;
     this.connected = false;
@@ -24,47 +33,86 @@ class Statusbar {
     this.messageHandler = null;
   }
 
+  /**
+   * Clears the status bar.
+   */
   clear() {
     this.setAdsSlotsLoaded();
+    this.setAdsSlotsReloaded();
+    this.setAdsSlotsRendered();
     this.setAdsSlotsViewable();
     this.setGptVersion();
   }
 
+  /**
+   * @param {number} value
+   */
   setAdsSlotsLoaded(value) {
     this.adsSlotsLoaded = value || 0;
-    document.querySelector("#text-num-ads-slots-loaded").textContent =
+    document.querySelector('#text-num-ads-slots-loaded').textContent =
       this.adsSlotsLoaded;
     this.updateAdsSlotsViewability();
   }
 
+  /**
+   * @param {number} value
+   */
+  setAdsSlotsRendered(value) {
+    this.adsSlotsRendered = value || 0;
+    document.querySelector('#text-num-ads-slots-rendered').textContent =
+      this.adsSlotsRendered;
+    this.updateAdsSlotsViewability();
+  }
+
+  /**
+   * @param {number} value
+   */
+  setAdsSlotsReloaded(value) {
+    this.adsSlotsReloaded = value || 0;
+    document.querySelector('#text-num-ads-slots-reload').textContent =
+      this.adsSlotsReloaded;
+  }
+
+  /**
+   * @param {number} value
+   */
   setAdsSlotsViewable(value) {
     this.adsSlotsViewable = value || 0;
-    document.querySelector("#text-num-ads-slots-visible").textContent =
+    document.querySelector('#text-num-ads-slots-visible').textContent =
       this.adsSlotsViewable;
     this.updateAdsSlotsViewability();
   }
 
+  /**
+   * @param {number} value
+   */
   setGptVersion(value) {
     this.gptVersion = value;
-    document.querySelector("#text-gpt-version").textContent = this.gptVersion
-      ? "v" + this.gptVersion
-      : "-";
+    document.querySelector('#text-gpt-version').textContent = this.gptVersion
+      ? 'v' + this.gptVersion
+      : '-';
   }
 
+  /**
+   * @param {boolean} value
+   */
   setConnectStatus(value) {
     this.connected = value;
     document
-      .querySelector("#icon-connect-status")
-      .classList.toggle("connected", this.connected);
+      .querySelector('#icon-connect-status')
+      .classList.toggle('connected', this.connected);
   }
 
+  /**
+   * Update ads slot viewability according the current state.
+   */
   updateAdsSlotsViewability() {
     this.adsSlotsViewability =
       this.adsSlotsLoaded > 0
         ? (100 / this.adsSlotsLoaded) * this.adsSlotsViewable
         : 0;
-    document.querySelector("#text-num-ads-slots-viewability").textContent =
-      parseFloat(this.adsSlotsViewability).toFixed(2) + "%";
+    document.querySelector('#text-num-ads-slots-viewability').textContent =
+      parseFloat(this.adsSlotsViewability).toFixed(2) + '%';
   }
 }
 

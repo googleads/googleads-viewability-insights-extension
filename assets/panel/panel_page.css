@@ -17,7 +17,7 @@
 body {
   display: flex;
   flex-flow: column;
-  font-family: "Segoe UI", Tahoma, sans-serif;
+  font-family: 'Segoe UI', Tahoma, sans-serif;
   font-size: 12px;
   height: 100vh;
   margin: 0;
@@ -44,19 +44,32 @@ body {
 }
 
 #icon-connect-status::before {
-  content: "wifi_tethering_off";
+  content: 'wifi_tethering_off';
 }
 
 #icon-connect-status.connected::before {
-  content: "wifi_tethering";
+  content: 'wifi_tethering';
+}
+
+#report {
+  width: 100%;
+}
+
+#report > thead tr {
+  background-color: rgb(241, 243, 244);
 }
 
 #report > thead th,
 #report > tbody td {
   border-bottom: 1px solid #f2f2f2;
-  padding: 1px;
-  padding-right: 16px;
   padding-left: 16px;
+  padding-right: 16px;
+  padding: 1px;
+  text-align: left;
+}
+
+#report > tbody > tr:nth-of-type(even) {
+  background-color: rgb(237, 238, 242);
 }
 
 .viewability-toolbar-container,

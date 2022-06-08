@@ -14,36 +14,54 @@
  * limitations under the License.
  */
 
-import { Toolbar } from "./toolbar";
+import { Toolbar } from './toolbar';
 
+/**
+ * Handles all script injections into the webpage and the gpt library.
+ * @class
+ */
 class ScriptHandler {
+  /**
+   * @param {string} tabId
+   * @param {string} sessionToken
+   * @static
+   */
   static injectScript(tabId, sessionToken) {
     chrome.scripting.executeScript(
       {
-        files: ["gpt_integration_script.js"],
+        files: ['gpt_integration_script.js'],
         target: { tabId: tabId },
-        world: "MAIN",
+        world: 'MAIN',
       },
       (injectionResults) => {
-        console.log("Inject Script results:", injectionResults);
+        console.log('Inject Script results:', injectionResults);
         ScriptHandler.injectStyleSheet(tabId);
         ScriptHandler.initScript(tabId, sessionToken);
       }
     );
   }
 
+  /**
+   * @param {string} tabId
+   * @static
+   */
   static injectStyleSheet(tabId) {
     chrome.scripting.insertCSS(
       {
-        files: ["gpt_integration_script.css"],
+        files: ['gpt_integration_script.css'],
         target: { tabId: tabId },
       },
       (injectionResults) => {
-        console.log("Inject StyleSheet results:", injectionResults);
+        console.log('Inject StyleSheet results:', injectionResults);
       }
     );
   }
 
+  /**
+   * @param {string} tabId
+   * @param {string} sessionToken
+   * @static
+   */
   static initScript(tabId, sessionToken) {
     chrome.scripting.executeScript(
       {
@@ -53,10 +71,10 @@ class ScriptHandler {
         },
         target: { tabId: tabId },
         args: [sessionToken],
-        world: "MAIN",
+        world: 'MAIN',
       },
       (injectionResults) => {
-        console.log("Init Script results:", injectionResults);
+        console.log('Init Script results:', injectionResults);
         ScriptHandler.enableViewableOverlay(
           Toolbar.shouldShowViewableOverlay()
         );
@@ -64,6 +82,10 @@ class ScriptHandler {
     );
   }
 
+  /**
+   * @param {boolean} enable
+   * @static
+   */
   static enableViewableOverlay(enable) {
     chrome.scripting.executeScript(
       {
@@ -74,10 +96,10 @@ class ScriptHandler {
         },
         target: { tabId: chrome.devtools.inspectedWindow.tabId },
         args: [enable],
-        world: "MAIN",
+        world: 'MAIN',
       },
       (injectionResults) => {
-        console.log("enableViewableOverlay:", injectionResults);
+        console.log('enableViewableOverlay:', injectionResults);
       }
     );
   }

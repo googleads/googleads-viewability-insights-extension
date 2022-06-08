@@ -14,4 +14,4 @@
  * limitations under the License.
  */
 
-chrome.devtools.panels.create("Viewability", null, "panel_page.html");
+chrome.devtools.panels.create('Viewability insights', null, 'panel_page.html');

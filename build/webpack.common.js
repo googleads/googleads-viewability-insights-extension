@@ -14,95 +14,95 @@
  * limitations under the License.
  */
 
-const path = require("path");
+const path = require('path');
 
-const CopyWebpackPlugin = require("copy-webpack-plugin");
-const HtmlWebpackPlugin = require("html-webpack-plugin");
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 exports.devtoolsPageConfig = {
-  name: "devtools_page",
-  target: "web",
+  name: 'devtools_page',
+  target: 'web',
   entry: {
-    devtools_page: "./src/devtools_page.js",
+    devtools_page: './src/devtools_page.js',
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: "assets/devtools_page.html",
-      filename: "[name].html",
+      template: 'assets/devtools_page.html',
+      filename: '[name].html',
     }),
     new CopyWebpackPlugin({
-      patterns: [{ from: "./src/manifest.json" }],
+      patterns: [{ from: './src/manifest.json' }],
     }),
   ],
   output: {
-    publicPath: "/",
-    path: path.resolve(__dirname, "..", "dist"),
-    filename: "[name].js",
+    publicPath: '/',
+    path: path.resolve(__dirname, '..', 'dist'),
+    filename: '[name].js',
   },
 };
 
 exports.panelPageConfig = {
-  name: "panel_page",
-  target: "web",
+  name: 'panel_page',
+  target: 'web',
   entry: {
-    panel_page: ["./src/panel/panel_page.js"],
+    panel_page: ['./src/panel/panel_page.js'],
   },
   plugins: [
     new MiniCssExtractPlugin({
-      filename: "[name].css",
-      chunkFilename: "[id].css",
+      filename: '[name].css',
+      chunkFilename: '[id].css',
     }),
     new HtmlWebpackPlugin({
-      template: "assets/panel/panel_page.html",
-      filename: "[name].html",
+      template: 'assets/panel/panel_page.html',
+      filename: '[name].html',
     }),
   ],
   module: {
     rules: [
       {
         test: /\.css$/,
-        use: [MiniCssExtractPlugin.loader, "css-loader"],
+        use: [MiniCssExtractPlugin.loader, 'css-loader'],
       },
     ],
   },
   output: {
-    publicPath: "/",
-    path: path.resolve(__dirname, "..", "dist"),
-    filename: "[name].js",
+    publicPath: '/',
+    path: path.resolve(__dirname, '..', 'dist'),
+    filename: '[name].js',
   },
 };
 
 exports.contentScriptConfig = {
-  name: "content_script",
-  target: "web",
+  name: 'content_script',
+  target: 'web',
   entry: {
-    content_script: "./src/content_script/content_script.js",
+    content_script: './src/content_script/content_script.js',
   },
   output: {
-    publicPath: "/",
-    path: path.resolve(__dirname, "..", "dist"),
-    filename: "[name].js",
+    publicPath: '/',
+    path: path.resolve(__dirname, '..', 'dist'),
+    filename: '[name].js',
   },
 };
 
 exports.gptIntegrationScriptConfig = {
-  name: "gpt_integration_script",
-  target: "web",
+  name: 'gpt_integration_script',
+  target: 'web',
   entry: {
-    gpt_integration_script: "./src/gpt/gpt_integration_script.js",
+    gpt_integration_script: './src/gpt/gpt_integration_script.js',
   },
   plugins: [
     new CopyWebpackPlugin({
-      patterns: [{ from: "./assets/gpt_integration_script.css" }],
+      patterns: [{ from: './assets/gpt_integration_script.css' }],
     }),
   ],
   output: {
-    publicPath: "/",
-    path: path.resolve(__dirname, "..", "dist"),
-    filename: "[name].js",
-    library: "ViewabilityInsights",
-    libraryTarget: "window",
-    libraryExport: "default",
+    publicPath: '/',
+    path: path.resolve(__dirname, '..', 'dist'),
+    filename: '[name].js',
+    library: 'ViewabilityInsights',
+    libraryTarget: 'window',
+    libraryExport: 'default',
   },
 };

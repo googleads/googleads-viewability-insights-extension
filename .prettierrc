@@ -1,0 +1,13 @@
+{
+  "endOfLine": "auto",
+  "printWidth": 80,
+  "singleQuote": true,
+  "overrides": [
+    {
+      "files": ["assets/panel/panel_page.html"],
+      "options": {
+        "printWidth": 550
+      }
+    }
+  ]
+}

@@ -7,6 +7,7 @@
   "license": "MIT",
   "devDependencies": {
     "@material-design-icons/font": "^0.11.1",
+    "@typescript-eslint/eslint-plugin": "^5.27.1",
     "copy-webpack-plugin": "^11.0.0",
     "css-loader": "^6.7.1",
     "eslint": "^8.17.0",
@@ -23,17 +24,17 @@
     "webpack-cli": "^4.9.2"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "npm run lint",
     "build": "webpack --config build/webpack.prod.js",
     "build:dev": "webpack --config build/webpack.dev.js",
     "dev": "webpack --watch",
-    "lint": "npm run eslint .",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
     "upgrade": "npm-upgrade & npm install & npm update & npm prune & npm audit fix & npm run test",
     "launch": "echo Lauching app. Please wait ... && npm run launch:linux --silent || npm run launch:mac --silent || npm run launch:win --silent || npm run launch:win11 --silent",
     "launch:linux": "google-chrome --load-and-launch-app=$PWD/dist --enable-logging --v=1 --no-first-run",
     "launch:mac": "\"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome\" --load-and-launch-app=$PWD/dist --enable-logging --v=1 --no-first-run",
     "launch:win": "echo && \"C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe\" --profile-directory=Default --load-and-launch-app=%CD%\\dist --enable-logging --v=1 --no-first-run",
     "launch:win11": "echo && \"C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe\" --profile-directory=Default --load-and-launch-app=%CD%\\dist --enable-logging --v=1 --no-first-run"
-  },
-  "dependencies": {}
+  }
 }

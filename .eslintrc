@@ -10,11 +10,8 @@
   "parser": "@typescript-eslint/parser",
   "plugins": ["@typescript-eslint"],
   "parserOptions": {
-    "ecmaVersion": 2020,
-    "sourceType": "module",
-    "ecmaFeatures": {
-      "jsx": true
-    }
+    "ecmaVersion": 2021,
+    "sourceType": "module"
   },
   "rules": {
     "no-unused-vars": [
@@ -38,20 +35,20 @@
   },
   "env": {
     "browser": true,
-    "node": true,
     "es2020": true,
     "serviceworker": true
   },
   "globals": {
     "DEVMODE": false,
     "VERSION": false,
+    "ViewabilityInsights": true,
     "chrome": true,
     "globalThis": false,
+    "googletag": true,
     "serviceWorkerOption": true,
     "window": true
   },
-  "settings": {
-  },
+  "settings": {},
   "overrides": [
     {
       "files": ["**/*_test.js"],
@@ -67,20 +64,6 @@
       "files": ["build/**/*.js"],
       "rules": {
         "@typescript-eslint/camelcase": "off"
-      }
-    },
-    {
-      "files": ["src/usr/bin/*.js"],
-      "rules": {
-        "no-unused-vars": "off",
-        "@typescript-eslint/no-unused-vars": "off"
-      }
-    },
-    {
-      "files": ["*.ts", "*.tsx"],
-      "rules": {
-        "@typescript-eslint/explicit-function-return-type": ["error"],
-        "@typescript-eslint/explicit-module-boundary-types": ["error"]
       }
     }
   ]

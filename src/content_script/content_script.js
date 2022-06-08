@@ -14,42 +14,72 @@
  * limitations under the License.
  */
 
+/**
+ * Handles the communication between the injected scripts <-> panel page.
+ * @class
+ */
 class ContentScript {
+  /**
+   * @constructor
+   */
   constructor() {
-    this.port = chrome.runtime.connect({ name: "viewability-insights" });
+    this.port = chrome.runtime.connect({ name: 'viewability-insights' });
     this.token = null;
     this.connected = false;
   }
 
+  /**
+   * Init event listener if there is no error and there is an valid port.
+   */
   init() {
-    this.addEventListener();
-    this.port.postMessage({ type: "init", value: "knock knock" });
     if (chrome.runtime.lastError) {
-      // Ignore
+      console.warn(
+        'Unable to init script, got error:',
+        chrome.runtime.lastError
+      );
+    } else if (this.port) {
+      this.addEventListener();
+      this.port.postMessage({ type: 'init', value: 'knock knock' });
     }
   }
 
+  /**
+   * Ads the message event listener to the port and window.
+   */
   addEventListener() {
-    this.port.onMessage.addListener(this.handleMessage.bind(this));
-    this.port.onDisconnect.addListener(this.handleDisconnect.bind(this));
-    window.addEventListener("message", this.handleWindowMessage.bind(this));
+    if (this.port) {
+      this.port.onMessage.addListener(this.handlePortMessage.bind(this));
+      this.port.onDisconnect.addListener(this.handlePortDisconnect.bind(this));
+      window.addEventListener('message', this.handleWindowMessage.bind(this));
+    }
   }
 
-  handleMessage(message) {
-    if (message.token) {
+  /**
+   * @param {*} message
+   */
+  handlePortMessage(message) {
+    if (message && message.token) {
       this.token = message.token;
       this.connected = true;
     }
   }
 
-  handleDisconnect(_event) {
+  /**
+   * Handles disconnects of the port.
+   */
+  handlePortDisconnect() {
     this.connected = false;
   }
 
+  /**
+   * @param {MessageEvent} event
+   */
   handleWindowMessage(event) {
+    // Ignore all window message without any or valid token.
     if (
       event.source !== window ||
-      typeof event.data.token == undefined ||
+      !event.data ||
+      typeof event.data.token == 'undefined' ||
       !this.token ||
       event.data.token != this.token
     ) {
@@ -68,4 +98,5 @@ class ContentScript {
   }
 }
 
+// Init content script automatically after injection.
 new ContentScript().init();

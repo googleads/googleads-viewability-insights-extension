@@ -1,6 +1,6 @@
 # Ad Manager Viewability Insights
 
-Ad Manager Viewability Insights is a tool to improve ad viewability on your inventory.
+Ad Manager Viewability Insights is a open-source Dev Tools extension to help to improving the viewability and quality of fixed and dynamic ad slots of webpages.
 
 This tool is a extension for the [Chrome DevTools](https://developer.chrome.com/docs/devtools/), an set of web developer tools built directly into the Google Chrome browser.
 
@@ -23,7 +23,7 @@ Load the 'dist' folder in your Chrome as locale extension folder.
 
 ### Usage
 
-**Run it:** Open Chrome DevTools, select the Viewability panel and reload the page.
+**Run it:** Open Chrome DevTools, select the **Viewability insights** panel and reload the page.
 
 ## Licensing
 
