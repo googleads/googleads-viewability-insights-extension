@@ -213,8 +213,17 @@ export default class ViewabilityInsights {
     overlay.id = 'viewability-overlay-' + elementId;
     overlay.className = 'viewability-insights-overlay';
 
-    // Handle creative size with different formats, if needed.
+    // Handle padding of parent element, if needed.
+    if (
+      window.getComputedStyle(slotElement) &&
+      window.getComputedStyle(slotElement).paddingTop &&
+      window.getComputedStyle(slotElement).paddingTop != '0px'
+    ) {
+      overlay.style.top = window.getComputedStyle(slotElement).paddingTop;
+    }
+
     if (size) {
+      // Handle creative size with different formats, if needed.
       if (
         Object.prototype.toString.call(size) === '[object String]' &&
         size.includes(',') &&

@@ -52,19 +52,26 @@ body {
 }
 
 #report {
+  border-collapse: separate;
+  border-spacing: 0px;
   width: 100%;
 }
 
 #report > thead tr {
   background-color: rgb(241, 243, 244);
+  position: sticky;
+  top: 0;
+}
+
+#report > thead th {
+  padding: 2px 8px;
 }
 
 #report > thead th,
 #report > tbody td {
-  border-bottom: 1px solid #f2f2f2;
-  padding-left: 16px;
-  padding-right: 16px;
-  padding: 1px;
+  border-bottom: 1px solid rgb(202, 205, 209);
+  border-left: 1px solid rgb(202, 205, 209);
+  padding: 1px 8px;
   text-align: left;
 }
 

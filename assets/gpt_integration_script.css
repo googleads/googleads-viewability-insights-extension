@@ -23,6 +23,7 @@
   height: 100%;
   justify-content: center;
   left: 0;
+  line-height: 16px;
   margin: auto;
   position: absolute;
   position: absolute;
@@ -56,8 +57,18 @@
 }
 
 .viewability-insights-overlay > .slot-info {
+  background: rgba(255, 0, 0, 0.75);
+}
+
+.viewability-insights-overlay.viewable > .slot-info {
+  background: rgba(0, 255, 0, 0.75);
+}
+
+.viewability-insights-overlay > .slot-info {
   display: none;
   flex: auto;
+  padding: 5px;
+  text-align: center;
 }
 
 .viewability-insights-overlay:hover > .slot-info {
