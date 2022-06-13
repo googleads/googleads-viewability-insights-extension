@@ -21,8 +21,8 @@
   <body>
     <header class="viewability-toolbar-container">
       <div class="toolbar">
-        <button id="button-enable-viewability-insights" class="toolbar-button toolbar-item" title="Enable Viewability Insights"></button>
-        <div class="toolbar-divider toolbar-item"></div>
+        <span class="toolbar-item material-icons">query_stats</span>
+        <span class="toolbar-divider toolbar-item"></span>
         <span>
           <input type="checkbox" id="checkbox-show-viewable-overlay" title="Shows viewable overlays (while DevTools is open)" checked />
           <label class="checkbox-text" for="checkbox-show-viewable-overlay" title="Shows viewable overlays (while DevTools is open)"> Shows Viewable Overlays</label>
@@ -42,7 +42,7 @@
             <th scope="col">Slot Id</th>
             <th scope="col">Ad Unit</th>
             <th scope="col">Size</th>
-            <th scope="col">Line Item ID</th>
+            <th scope="col">Line Item Id</th>
             <th scope="col">Min Viewability</th>
             <th scope="col">Max Viewability</th>
             <th scope="col">Current Viewability</th>
@@ -59,15 +59,17 @@
         <div class="statusbar-divider toolbar-item"></div>
         <span>GPT Version: <span id="text-gpt-version">-</span></span>
         <div class="statusbar-divider toolbar-item"></div>
-        <span>Ad Slots rendered: <span id="text-num-ads-slots-rendered">0</span></span>
-        <div class="statusbar-divider toolbar-item"></div>
-        <span>Ad Slots loaded: <span id="text-num-ads-slots-loaded">0</span></span>
-        <div class="statusbar-divider toolbar-item"></div>
-        <span>Ad Slots viewable: <span id="text-num-ads-slots-visible">0</span></span>
-        <div class="statusbar-divider toolbar-item"></div>
-        <span>Ad Slots reloads: <span id="text-num-ads-slots-reload">0</span></span>
-        <div class="statusbar-divider toolbar-item"></div>
-        <span>Ad Slots Viewability: <span id="text-num-ads-slots-viewability">0.00%</span></span>
+        <span title="This event is fired when an ad has been requested for a particular slot.">Ad Slots requested: <span id="text-num-ads-slots-requested">0</span></span>
+        <div class="toolbar-item material-icons">chevron_right</div>
+        <span title="This event is fired when the creative code is injected into a slot and will occur before the creative's resources are fetched, so the creative may not be visible yet.">Ad Slots rendered: <span id="text-num-ads-slots-rendered">0</span></span>
+        <div class="toolbar-item material-icons">chevron_right</div>
+        <span title="This event is fired when the creative's iframe fires its load event. When rendering rich media ads in sync rendering mode, no iframe is used so no SlotOnloadEvent will be fired.">Ad Slots loaded: <span id="text-num-ads-slots-loaded">0</span></span>
+        <div class="toolbar-item material-icons">chevron_right</div>
+        <span title="This event is fired when an impression becomes viewable, according to the Active View criteria.">Ad Slots viewable: <span id="text-num-ads-slots-visible">0</span></span>
+        <div class="toolbar-item material-icons">chevron_right</div>
+        <span title="This event is fired when an already known slots gets destroyed or reloaded.">Ad Slots reloads: <span id="text-num-ads-slots-reload">0</span></span>
+        <div class="toolbar-item material-icons">chevron_right</div>
+        <span title="This shows the percent of loaded ad slots to viewable ad slots.">Ad Slots viewability: <span id="text-num-ads-slots-viewability">0.00%</span></span>
       </div>
     </footer>
   </body>

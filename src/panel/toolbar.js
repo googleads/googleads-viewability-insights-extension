@@ -25,7 +25,7 @@ class Toolbar {
    * @constructor
    */
   constructor() {
-    this.enabled = false;
+    this.enabled = true;
   }
 
   /**
@@ -33,30 +33,11 @@ class Toolbar {
    */
   addEventListener() {
     document
-      .querySelector('#button-enable-viewability-insights')
-      .addEventListener('click', this.enableViewabilityInsights.bind(this));
-    document
       .querySelector('#checkbox-show-viewable-overlay')
       .addEventListener('change', this.showViewableOverlay.bind(this));
     document
       .querySelector('#checkbox-show-active-view-elements')
       .addEventListener('change', this.showActiveViewElements.bind(this));
-  }
-
-  /**
-   * @param {*} event
-   */
-  enableViewabilityInsights(event) {
-    this.enabled = !this.enabled;
-    event.currentTarget.classList.toggle('active');
-    console.log(
-      'Enable Viewability Insights',
-      event.currentTarget,
-      this.enabled
-    );
-    if (this.enabled) {
-      chrome.devtools.inspectedWindow.reload();
-    }
   }
 
   /**

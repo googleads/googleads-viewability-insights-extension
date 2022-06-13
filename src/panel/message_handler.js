@@ -114,6 +114,9 @@ class MessageHandler {
       case 'ads-slots-loaded':
         this.handleAdsSlotsLoaded(message);
         break;
+      case 'ads-slots-requested':
+        this.handleAdsSlotsRequested(message);
+        break;
       case 'ads-slots-rendered':
         this.handleAdsSlotsRendered(message);
         break;
@@ -153,6 +156,15 @@ class MessageHandler {
   handleAdsSlotsLoaded(message) {
     if (this.statusbar) {
       this.statusbar.setAdsSlotsLoaded(message.value);
+    }
+  }
+
+  /**
+   * @param {Object} message
+   */
+  handleAdsSlotsRequested(message) {
+    if (this.statusbar) {
+      this.statusbar.setAdsSlotsRequested(message.value);
     }
   }
 

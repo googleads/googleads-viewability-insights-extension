@@ -25,24 +25,6 @@ body {
   padding: 0;
 }
 
-#button-enable-viewability-insights {
-  border: 1px solid #777;
-  background: #9e9e9e;
-  border-radius: 50%;
-  filter: drop-shadow(1px 1px 1px rgba(0, 0, 0, 0.3));
-  height: 18px;
-  margin: 4px 5px;
-  width: 18px;
-}
-
-#button-enable-viewability-insights:hover {
-  background: #607d8b;
-}
-
-#button-enable-viewability-insights.active {
-  background: #f44336;
-}
-
 #icon-connect-status::before {
   content: 'wifi_tethering_off';
 }
@@ -102,7 +84,7 @@ body {
   background-color: rgb(241, 243, 244);
   border-top: 1px solid rgb(202, 205, 209);
   display: flex;
-  line-height: 27px;
+  line-height: 25px;
 }
 
 .toolbar input,

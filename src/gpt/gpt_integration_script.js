@@ -24,43 +24,68 @@ export default class ViewabilityInsights {
    * @constructor
    */
   constructor(token) {
+    this.knownAdsSlots = {};
     this.showViewableOverlay = false;
     this.slotOnLoadCount = 0;
     this.slotReloadedCount = 0;
     this.slotRendererEndedCount = 0;
+    this.slotRequestedCount = 0;
     this.token = token;
     this.viewableImpressionCount = 0;
-    this.knownAdsSlots = {};
   }
 
   /**
    * Ads the googletag event listener as soon googletag is ready.
+   * All event listener are added with an try and catch to avoid possible edge cases.
    */
   addEventListener() {
     window.googletag = window.googletag || { cmd: [] };
     googletag.cmd.push(
       function () {
-        googletag
-          .pubads()
-          .addEventListener(
-            'impressionViewable',
-            this.impressionViewable.bind(this)
-          );
-        googletag
-          .pubads()
-          .addEventListener(
-            'slotVisibilityChanged',
-            this.slotVisibilityChanged.bind(this)
-          );
-        googletag
-          .pubads()
-          .addEventListener(
-            'slotRenderEnded',
-            this.slotRendererEnded.bind(this)
-          );
-        googletag
-          .pubads()
-          .addEventListener('slotOnload', this.slotOnload.bind(this));
+        try {
+          googletag
+            .pubads()
+            .addEventListener(
+              'impressionViewable',
+              this.impressionViewable.bind(this)
+            );
+        } catch (e) {
+          console.debug('Unable to add listener for impressionViewable:', e);
+        }
+        try {
+          googletag
+            .pubads()
+            .addEventListener('slotRequested', this.slotRequested.bind(this));
+        } catch (e) {
+          console.debug('Unable to add listener for slotRequested:', e);
+        }
+        try {
+          googletag
+            .pubads()
+            .addEventListener(
+              'slotVisibilityChanged',
+              this.slotVisibilityChanged.bind(this)
+            );
+        } catch (e) {
+          console.debug('Unable to add listener for slotVisibilityChanged:', e);
+        }
+        try {
+          googletag
+            .pubads()
+            .addEventListener(
+              'slotRenderEnded',
+              this.slotRendererEnded.bind(this)
+            );
+        } catch (e) {
+          console.debug('Unable to add listener for slotRenderEnded:', e);
+        }
+        try {
+          googletag
+            .pubads()
+            .addEventListener('slotOnload', this.slotOnload.bind(this));
+        } catch (e) {
+          console.debug('Unable to add listener for slotOnload:', e);
+        }
         window.postMessage({
           type: 'version',
           token: this.token,
@@ -94,6 +119,18 @@ export default class ViewabilityInsights {
       type: 'ads-slots-viewable',
       token: this.token,
       value: this.viewableImpressionCount,
+    });
+  }
+
+  /**
+   * @param {googletag.events.SlotRequestedEvent} event
+   */
+  slotRequested() {
+    this.slotRequestedCount++;
+    window.postMessage({
+      type: 'ads-slots-requested',
+      token: this.token,
+      value: this.slotRequestedCount,
     });
   }
 

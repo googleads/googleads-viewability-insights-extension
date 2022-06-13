@@ -26,6 +26,7 @@ class Statusbar {
     this.adsSlotsLoaded = 0;
     this.adsSlotsReloaded = 0;
     this.adsSlotsRendered = 0;
+    this.adsSlotsRequested = 0;
     this.adsSlotsViewability = 0;
     this.adsSlotsViewable = 0;
     this.connected = false;
@@ -40,6 +41,7 @@ class Statusbar {
     this.setAdsSlotsLoaded();
     this.setAdsSlotsReloaded();
     this.setAdsSlotsRendered();
+    this.setAdsSlotsRequested();
     this.setAdsSlotsViewable();
     this.setGptVersion();
   }
@@ -52,6 +54,15 @@ class Statusbar {
     document.querySelector('#text-num-ads-slots-loaded').textContent =
       this.adsSlotsLoaded;
     this.updateAdsSlotsViewability();
+  }
+
+  /**
+   * @param {number} value
+   */
+  setAdsSlotsRequested(value) {
+    this.adsSlotsRequested = value || 0;
+    document.querySelector('#text-num-ads-slots-requested').textContent =
+      this.adsSlotsRequested;
   }
 
   /**
