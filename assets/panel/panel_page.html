@@ -21,33 +21,42 @@
   <body>
     <header class="viewability-toolbar-container">
       <div class="toolbar">
-        <span class="toolbar-item material-icons">query_stats</span>
+        <span id="button-reload" class="toolbar-item material-icons" title="Start measurements and reloads the page">refresh</span>
         <span class="toolbar-divider toolbar-item"></span>
         <span>
           <input type="checkbox" id="checkbox-show-viewable-overlay" title="Shows viewable overlays (while DevTools is open)" checked />
-          <label class="checkbox-text" for="checkbox-show-viewable-overlay" title="Shows viewable overlays (while DevTools is open)"> Shows Viewable Overlays</label>
+          <label class="checkbox-text" for="checkbox-show-viewable-overlay" title="Shows viewable overlays (while DevTools is open)"> Show Viewable Overlays</label>
         </span>
-        <div class="toolbar-divider toolbar-item"></div>
+        <div class="toolbar-divider toolbar-item" style="display: none"></div>
         <span style="display: none">
           <input type="checkbox" id="checkbox-show-active-view-elements" title="Shows Active View Elements (while DevTools is open)" />
-          <label class="checkbox-text" for="checkbox-show-active-view-elements" title="Shows Active View Elements (while DevTools is open)"> Shows ActiveView Elements</label>
+          <label class="checkbox-text" for="checkbox-show-active-view-elements" title="Shows Active View Elements (while DevTools is open)"> Show ActiveView Elements</label>
         </span>
       </div>
     </header>
     <div class="viewability-container">
+      <div id="starting-note">
+        <h1>Get viewability insights on your website</h1>
+        <ol>
+          <li>Click the reload button <span class="material-icons">refresh</span> to record the page load.</li>
+          <li>Get an overview of all ad slots, their sizes and their current viewability.</li>
+          <li>Navigate throw the page to understand when an ad slots is considered as viewable.</li>
+          <li>Identify improvements to your viewability, by the overview and the visualization on the page.</li>
+        </ol>
+      </div>
       <table id="report" aria-describedby="Viewability Report Overview">
         <thead>
           <tr>
-            <th scope="col">#</th>
-            <th scope="col">Slot Id</th>
-            <th scope="col">Ad Unit</th>
-            <th scope="col">Size</th>
-            <th scope="col">Line Item Id</th>
-            <th scope="col">Min Viewability</th>
-            <th scope="col">Max Viewability</th>
-            <th scope="col">Current Viewability</th>
-            <th scope="col">Viewable</th>
-            <th scope="col">Reloads</th>
+            <th scope="col" class="index" title="">#</th>
+            <th scope="col" title="The ID of the slot div provided when the slot was defined.">Slot Id</th>
+            <th scope="col" title="The full path of the ad unit, with the network code and ad unit path.">Ad Unit</th>
+            <th scope="col" title="Indicates the pixel size of the rendered creative.">Size</th>
+            <th scope="col" title="Line item ID of the rendered reservation or backfill ad.">Line Item Id</th>
+            <th scope="col" title="Min. detected viewability before the slot became viewable.">Min Viewability</th>
+            <th scope="col" title="Max. detected viewability of the slot.">Max Viewability</th>
+            <th scope="col" title="The current on-screen percentage of an ad slot's area. The event is throttled and will not fire more often than once every 200ms.">Current Viewability</th>
+            <th scope="col" title="Is the slot viewable, according to the Active View criteria.">Viewable</th>
+            <th scope="col" title="Number of detected reloads of the slot.">Reloads</th>
           </tr>
         </thead>
         <tbody></tbody>
@@ -57,7 +66,7 @@
       <div class="statusbar">
         <div id="icon-connect-status" class="material-icons"></div>
         <div class="statusbar-divider toolbar-item"></div>
-        <span>GPT Version: <span id="text-gpt-version">-</span></span>
+        <span title="The detected GPT version">GPT Version: <span id="text-gpt-version">-</span></span>
         <div class="statusbar-divider toolbar-item"></div>
         <span title="This event is fired when an ad has been requested for a particular slot.">Ad Slots requested: <span id="text-num-ads-slots-requested">0</span></span>
         <div class="toolbar-item material-icons">chevron_right</div>
@@ -69,7 +78,7 @@
         <div class="toolbar-item material-icons">chevron_right</div>
         <span title="This event is fired when an already known slots gets destroyed or reloaded.">Ad Slots reloads: <span id="text-num-ads-slots-reload">0</span></span>
         <div class="toolbar-item material-icons">chevron_right</div>
-        <span title="This shows the percent of loaded ad slots to viewable ad slots.">Ad Slots viewability: <span id="text-num-ads-slots-viewability">0.00%</span></span>
+        <span title="This shows the overall percent of loaded ad slots to viewable ad slots.">Ad Slots viewability: <span id="text-num-ads-slots-viewability">0.00%</span></span>
       </div>
     </footer>
   </body>

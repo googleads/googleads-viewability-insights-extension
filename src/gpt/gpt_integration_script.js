@@ -36,12 +36,19 @@ export default class ViewabilityInsights {
 
   /**
    * Ads the googletag event listener as soon googletag is ready.
-   * All event listener are added with an try and catch to avoid possible edge cases.
    */
   addEventListener() {
     window.googletag = window.googletag || { cmd: [] };
     googletag.cmd.push(
       function () {
+        // Send the version string first, so that we know we are connected.
+        window.postMessage({
+          type: 'version',
+          token: this.token,
+          value: googletag.getVersion(),
+        });
+
+        // All event listener are added with an try and catch to avoid possible edge cases.
         try {
           googletag
             .pubads()
@@ -86,11 +93,6 @@ export default class ViewabilityInsights {
         } catch (e) {
           console.debug('Unable to add listener for slotOnload:', e);
         }
-        window.postMessage({
-          type: 'version',
-          token: this.token,
-          value: googletag.getVersion(),
-        });
       }.bind(this)
     );
   }

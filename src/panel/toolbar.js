@@ -33,6 +33,9 @@ class Toolbar {
    */
   addEventListener() {
     document
+      .querySelector('#button-reload')
+      .addEventListener('click', this.reloadPage.bind(this));
+    document
       .querySelector('#checkbox-show-viewable-overlay')
       .addEventListener('change', this.showViewableOverlay.bind(this));
     document
@@ -43,8 +46,16 @@ class Toolbar {
   /**
    * @param {*} event
    */
+  reloadPage(event) {
+    console.debug('Reload page', event);
+    chrome.devtools.inspectedWindow.reload();
+  }
+
+  /**
+   * @param {*} event
+   */
   showViewableOverlay(event) {
-    console.log('Show Viewable Overlay', event.currentTarget.checked);
+    console.debug('Show Viewable Overlay', event.currentTarget.checked);
     ScriptHandler.enableViewableOverlay(event.currentTarget.checked);
   }
 
@@ -52,7 +63,7 @@ class Toolbar {
    * @param {*} event
    */
   showActiveViewElements(event) {
-    console.log('Show Active View Elements', event.currentTarget.checked);
+    console.debug('Show Active View Elements', event.currentTarget.checked);
   }
 
   /**

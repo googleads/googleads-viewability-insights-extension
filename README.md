@@ -45,11 +45,11 @@ The report will provide you a detail overview about each single ad slot.
 - **Ad Unit**: The full path of the ad unit, with the network code and ad unit path.
 - **Size**: Indicates the pixel size of the rendered creative.
 - **Line Item Id**: Line item ID of the rendered reservation or backfill ad.
-- **Min Viewability**: Min. viewability before the slot became viewable.
-- **Max Viewability**: Max. viewability of the slot.
+- **Min Viewability**: Min. detected viewability before the slot became viewable.
+- **Max Viewability**: Max. detected viewability of the slot.
 - **Current Viewability**: The current on-screen percentage of an ad slot's area. The event is throttled and will not fire more often than once every 200ms.
 - **Viewable**: Is the slot viewable, according to the [Active View criteria](https://support.google.com/admanager/answer/4524488).
-- **Reloads**: Number of reloads of the slot.
+- **Reloads**: Number of detected reloads of the slot.
 
 #### Status Bar
 
@@ -62,7 +62,7 @@ The status bar will provide some general information about the ad slots.
 - **Ad Slots loaded:** This event is fired when the creative's iframe fires its load event. When rendering rich media ads in sync rendering mode, no iframe is used so no SlotOnloadEvent will be fired.
 - **Ad Slots viewable:** This event is fired when an impression becomes viewable, according to the [Active View criteria](https://support.google.com/admanager/answer/4524488).
 - **Ad Slots reloaded:** This event is fired when an already known slots gets destroyed or reloaded.
-- **Ad Slots viewability:** This shows the percent of loaded ad slots to viewable ad slots.
+- **Ad Slots viewability:** This shows the overall percent of loaded ad slots to viewable ad slots.
 
 ## 📜 Licensing
 

@@ -103,6 +103,28 @@ class ScriptHandler {
       }
     );
   }
+
+  /**
+   * @param {string} elementId
+   * @static
+   */
+  static scrollIntoView(elementId) {
+    chrome.scripting.executeScript(
+      {
+        function: function (elementId) {
+          if (elementId && document.getElementById(elementId)) {
+            document.getElementById(elementId).scrollIntoView(false);
+          }
+        },
+        target: { tabId: chrome.devtools.inspectedWindow.tabId },
+        args: [elementId],
+        world: 'MAIN',
+      },
+      (injectionResults) => {
+        console.log('scrollIntoView:', injectionResults);
+      }
+    );
+  }
 }
 
 export { ScriptHandler };

@@ -25,17 +25,65 @@ body {
   padding: 0;
 }
 
+#button-reload {
+  font-size: 18px;
+  color: rgb(110, 110, 110);
+  cursor: pointer;
+}
+
+#button-reload:hover {
+  color: #000;
+}
+
 #icon-connect-status::before {
   content: 'wifi_tethering_off';
 }
 
 #icon-connect-status.connected::before {
   content: 'wifi_tethering';
+  color: rgb(217, 48, 37);
+}
+
+#starting-note {
+  padding: 10px;
+  font-size: 13px;
+  color: rgb(32, 33, 36);
+}
+
+#starting-note h1 {
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 28px;
+}
+
+#starting-note ol {
+  display: block;
+  list-style-type: decimal;
+  margin-block-start: 1em;
+  margin-block-end: 1em;
+  margin-inline-start: 0px;
+  margin-inline-end: 0px;
+  padding-inline-start: 40px;
+}
+
+#starting-note li {
+  font-size: 13px;
+  letter-spacing: 0.03em;
+  line-height: 1.54;
+  margin-bottom: 9px;
+  position: relative;
+}
+
+#starting-note li .material-icons {
+  font-size: 20px;
+  vertical-align: bottom;
+  border: 1px solid #ccc;
 }
 
 #report {
   border-collapse: separate;
   border-spacing: 0px;
+  display: none;
   width: 100%;
 }
 
@@ -61,11 +109,26 @@ body {
   background-color: rgb(237, 238, 242);
 }
 
+#report > thead > tr > th.index,
+#report > tbody > tr > td.index {
+  color: #777;
+}
+
+#report > tbody > tr > td.slot-id {
+  cursor: zoom-in;
+}
+
 .viewability-toolbar-container,
 .viewability-statusbar-container {
   display: flex;
   flex: 0 0 auto;
-  height: 27px;
+  height: 26px !important;
+  line-height: 26px !important;
+}
+
+.viewability-toolbar-container .material-icons,
+.viewability-statusbar-container .material-icons {
+  line-height: 26px;
 }
 
 .viewability-toolbar-container > :first-child,
@@ -73,30 +136,26 @@ body {
   flex: 1 1 auto;
 }
 
-.toolbar {
+.toolbar,
+.statusbar {
   background-color: rgb(241, 243, 244);
   border-bottom: 1px solid rgb(202, 205, 209);
   display: flex;
-  line-height: 27px;
-}
-
-.statusbar {
-  background-color: rgb(241, 243, 244);
-  border-top: 1px solid rgb(202, 205, 209);
-  display: flex;
-  line-height: 25px;
+  padding-left: 5px;
 }
 
 .toolbar input,
 .statusbar input {
-  vertical-align: middle;
+  padding: 0;
+  margin: 0;
+  vertical-align: text-bottom;
 }
 
 .toolbar-divider,
 .statusbar-divider {
   background-color: rgb(202, 205, 209) !important;
   height: 16px;
-  margin: 5px 4px;
+  margin: 5px 8px;
   width: 1px;
 }
 

@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+import { ScriptHandler } from './script_handler';
+
 const CellContent = {
   Index: 0,
   Slot: 1,
@@ -25,6 +27,19 @@ const CellContent = {
   CurrentViewability: 7,
   Viewable: 8,
   Reloads: 9,
+};
+
+const CellName = {
+  Index: 'index',
+  Slot: 'slot-id',
+  AdUnit: 'ad-unit',
+  Size: 'ad-size',
+  LineItem: 'line-item',
+  MinViewability: 'min-viewability',
+  MaxViewability: 'max-viewability',
+  CurrentViewability: 'current-viewability',
+  Viewable: 'viewable',
+  Reloads: 'reloads',
 };
 
 /**
@@ -81,17 +96,48 @@ class Report {
     const row = reportTable.insertRow(this.slotCounter);
     row.id = 'row-' + slot.slotElementId;
 
-    // Added default cells and values.
-    this.insertCell_(row, CellContent.Index, this.slotCounter + 1);
-    this.insertCell_(row, CellContent.Slot, slot.slotElementId);
-    this.insertCell_(row, CellContent.AdUnit, slot.adUnitPath);
-    this.insertCell_(row, CellContent.Size, slot.size);
-    this.insertCell_(row, CellContent.LineItem, slot.lineItemId || '');
-    this.insertCell_(row, CellContent.MinViewability, 0);
-    this.insertCell_(row, CellContent.MaxViewability, 0);
-    this.insertCell_(row, CellContent.CurrentViewability, 0);
-    this.insertCell_(row, CellContent.Viewable, false);
-    this.insertCell_(row, CellContent.Reloads, 0);
+    // Added default cells, event handler and values.
+    this.insertCell_(
+      row,
+      CellContent.Index,
+      CellName.Index,
+      this.slotCounter + 1
+    );
+    this.insertCell_(
+      row,
+      CellContent.Slot,
+      CellName.Slot,
+      slot.slotElementId,
+      this.scrollIntoView
+    );
+    this.insertCell_(row, CellContent.AdUnit, CellName.AdUnit, slot.adUnitPath);
+    this.insertCell_(row, CellContent.Size, CellName.Size, slot.size);
+    this.insertCell_(
+      row,
+      CellContent.LineItem,
+      CellName.LineItem,
+      slot.lineItemId || ''
+    );
+    this.insertCell_(
+      row,
+      CellContent.MinViewability,
+      CellName.MinViewability,
+      0
+    );
+    this.insertCell_(
+      row,
+      CellContent.MaxViewability,
+      CellName.MaxViewability,
+      0
+    );
+    this.insertCell_(
+      row,
+      CellContent.CurrentViewability,
+      CellName.CurrentViewability,
+      0
+    );
+    this.insertCell_(row, CellContent.Viewable, CellName.Viewable, false);
+    this.insertCell_(row, CellContent.Reloads, CellName.Reloads, 0);
 
     // Increase Slot counter.
     this.slotCounter++;
@@ -152,14 +198,30 @@ class Report {
   }
 
   /**
+   * @param {Event} event
+   */
+  scrollIntoView(event) {
+    if (event.target && event.target.innerText) {
+      ScriptHandler.scrollIntoView(event.target.innerText);
+    }
+  }
+
+  /**
    * @param {HTMLElement} row
    * @param {number} index
+   * @param {string} name
    * @param {*} value
+   * @param {function?} clickHandler
    * @private
    */
-  insertCell_(row, index, value) {
+  insertCell_(row, index, name, value, clickHandler = null) {
     const cell = row.insertCell(index);
+    cell.classList.add(name);
     cell.innerText = typeof value != 'undefined' ? value : '';
+
+    if (cell && clickHandler && typeof clickHandler === 'function') {
+      row.addEventListener('click', clickHandler);
+    }
   }
 }
 

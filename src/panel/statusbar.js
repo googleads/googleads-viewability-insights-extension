@@ -43,6 +43,7 @@ class Statusbar {
     this.setAdsSlotsRendered();
     this.setAdsSlotsRequested();
     this.setAdsSlotsViewable();
+    this.setConnectStatus();
     this.setGptVersion();
   }
 
@@ -102,13 +103,21 @@ class Statusbar {
     document.querySelector('#text-gpt-version').textContent = this.gptVersion
       ? 'v' + this.gptVersion
       : '-';
+
+    // Show starting-note, if we detect no gpt version.
+    document.querySelector('#starting-note').style.display = this.gptVersion
+      ? 'none'
+      : 'block';
+    document.querySelector('#report').style.display = !this.gptVersion
+      ? 'none'
+      : 'table';
   }
 
   /**
    * @param {boolean} value
    */
   setConnectStatus(value) {
-    this.connected = value;
+    this.connected = value ? true : false;
     document
       .querySelector('#icon-connect-status')
       .classList.toggle('connected', this.connected);
