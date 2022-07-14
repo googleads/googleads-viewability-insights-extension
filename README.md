@@ -1,5 +1,9 @@
 # Ad Manager Viewability Insights 🚀
 
+[<img
+src="examples/chrome_webstore.png" align="right"
+alt="Available in the Chrome Web Store">](https://chrome.google.com/webstore/detail/ad-manager-viewability-insights/ahnljpdlfbmbhfabicjhfpaahfpedgfn)
+
 Ad Manager Viewability Insights is a open-source Dev Tools extension to help to improving the viewability and quality of fixed and dynamic ad slots of webpages.
 
 ![Example image of the extension](examples/viewability-insights.png)
@@ -10,32 +14,45 @@ This tool is a extension for the [Chrome DevTools](https://developer.chrome.com/
 
 ⚠️ Ad Manager Viewability Insights results aren't an indication of compliance or non-compliance with any Google Publisher Policies.
 
-## Chrome DevTools Extension
+## ![](examples/chrome_devtools.png) Chrome DevTools Extension
 
-### 🛠️ Setup
+### ⚙️ Install from Chrome Store
 
-From within the directory run:
+If you only want to install the **Ad Manager Viewability Insights**, you could use the
+pre-compiled version from the Chrome Store.
+
+1. Visit the [Chrome Web Store][chrome_store]
+2. Click **Add to Chrome**
+
+### 🛠️ Build the **Ad Manager Viewability Insights** from source
+
+In the case you want to build the **Ad Manager Viewability Insights** from source, you need to run the following commands within the directory:
 
 ```sh
 npm install
 npm run build
 ```
 
-Load the 'dist' folder in your Chrome as locale extension folder.
+Load the **dist** folder in your Chrome as locale extension folder.
 
-### ⚗️ Usage
+## ⚗️ Usage
 
-**Run it:** Open Chrome DevTools, select the **Viewability insights** panel and reload the page.
+**Run it:** Open Chrome DevTools, select the **Viewability insights** panel.
 
 ![Example image of the viewability insights panel](examples/viewability-insights-button.png)
 
-#### Toolbar
+1. Click the reload button ![button with reload symbole](examples/reload_button.png) to record the page load.
+2. Get an overview of all ad slots, their sizes and their current viewability.
+3. Navigate throw the page to understand when an ad slots is considered as viewable.
+3. Identify improvements to your viewability, by the overview and the visualization on the page.
 
-The toolbar allows you to enable or disable the viewable overlays on the webpage.
+### 🧰 Toolbar
+
+The toolbar allows you to reload the page and to enable / disable the viewable overlays on the webpage.
 
 ![Example image of the toolbar](examples/tool-bar.png)
 
-#### Viewability Insights Report
+### 📊 Viewability Insights Report
 
 The report will provide you a detail overview about each single ad slot.
 
@@ -51,9 +68,9 @@ The report will provide you a detail overview about each single ad slot.
 - **Viewable**: Is the slot viewable, according to the [Active View criteria](https://support.google.com/admanager/answer/4524488).
 - **Reloads**: Number of detected reloads of the slot.
 
-#### Status Bar
+### 🔎 Status Bar
 
-The status bar will provide some general information about the ad slots.
+The status bar will provide some general information about the ad slots on the page.
 
 ![Example image of the status bar](examples/status-bar.png)
 
@@ -77,6 +94,7 @@ them using our [issue tracker](https://github.com/googleads/googleads-viewabilit
 
 Contributing to this project is subject to the guidelines in the
 [CONTRIBUTING.md](CONTRIBUTING.md) file, which, in brief, requires that
-contributors sign the [Individual Contributor License Agreement (CLA)][1].
+contributors sign the [Individual Contributor License Agreement (CLA)][cla].
 
-[1]: https://cla.developers.google.com/
+[cla]: https://cla.developers.google.com/
+[chrome_store]: https://chrome.google.com/webstore/detail/ad-manager-viewability-insights/ahnljpdlfbmbhfabicjhfpaahfpedgfn
