@@ -9,7 +9,8 @@
     "googletag",
     "postupgrade",
     "pubads",
-    "Viewability"
+    "Viewability",
+    "webstore"
   ],
   "cSpell.ignorePaths" : [
     "*.yml",

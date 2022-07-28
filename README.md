@@ -14,11 +14,11 @@ This tool is a extension for the [Chrome DevTools](https://developer.chrome.com/
 
 ⚠️ Ad Manager Viewability Insights results aren't an indication of compliance or non-compliance with any Google Publisher Policies.
 
-## ![](examples/chrome_devtools.png) Chrome DevTools Extension
+## ![🔨](examples/chrome_devtools.png) Chrome DevTools Extension
 
 ### ⚙️ Install from Chrome Store
 
-If you only want to install the **Ad Manager Viewability Insights**, you could use the
+If you only want to install the **Ad Manager Viewability Insights**, please use the
 pre-compiled version from the Chrome Store.
 
 1. Visit the [Chrome Web Store][chrome_store]
@@ -26,31 +26,43 @@ pre-compiled version from the Chrome Store.
 
 ### 🛠️ Build the **Ad Manager Viewability Insights** from source
 
-In the case you want to build the **Ad Manager Viewability Insights** from source, you need to run the following commands within the directory:
+In the case you want to build the **Ad Manager Viewability Insights** from source, you need to run the following [Node.js][node.js] commands within the directory:
 
 ```sh
 npm install
 npm run build
 ```
 
-Load the **dist** folder in your Chrome as locale extension folder.
+Afterwards load the **dist** folder in your Chrome browser as locale extension folder.
 
 ## ⚗️ Usage
 
-**Run it:** Open Chrome DevTools, select the **Viewability insights** panel.
+**Run it:** Open the Chrome DevTools, select the **Viewability insights** panel.
 
 ![Example image of the viewability insights panel](examples/viewability-insights-button.png)
 
-1. Click the reload button ![button with reload symbole](examples/reload_button.png) to record the page load.
+1. Click the reload button ![button with reload symbol](examples/reload_button.png) to record the page load.
 2. Get an overview of all ad slots, their sizes and their current viewability.
 3. Navigate throw the page to understand when an ad slots is considered as viewable.
-3. Identify improvements to your viewability, by the overview and the visualization on the page.
+4. Identify improvements to your viewability, by the overview and the visualization on the page.
 
 ### 🧰 Toolbar
 
 The toolbar allows you to reload the page and to enable / disable the viewable overlays on the webpage.
 
 ![Example image of the toolbar](examples/tool-bar.png)
+
+#### Not viewable ad slot
+
+Currently not viewable ad slots are rendered with a red border and will show the following overlay on mouse over.
+
+![Example image of not viewable ad slot](examples/ad_slot_no_viewable.png)
+
+#### Viewable ad slot
+
+As soon a ad slots is considered as viewable it will be rendered with a green border and will show the following overlay on mouse over.
+
+![Example image of not viewable ad slot](examples/ad_slot_viewable.png)
 
 ### 📊 Viewability Insights Report
 
@@ -98,3 +110,4 @@ contributors sign the [Individual Contributor License Agreement (CLA)][cla].
 
 [cla]: https://cla.developers.google.com/
 [chrome_store]: https://chrome.google.com/webstore/detail/ad-manager-viewability-insights/ahnljpdlfbmbhfabicjhfpaahfpedgfn
+[node.js]: https://nodejs.org/en/
