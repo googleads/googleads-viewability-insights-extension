@@ -23,9 +23,10 @@ class ContentScript {
    * @constructor
    */
   constructor() {
-    this.port = chrome.runtime.connect({ name: 'viewability-insights' });
+    this.connectionName = 'viewability-insights';
     this.token = null;
     this.connected = false;
+    this.port = chrome.runtime.connect({ name: this.connectionName });
   }
 
   /**
@@ -40,6 +41,11 @@ class ContentScript {
     } else if (this.port) {
       this.addEventListener();
       this.port.postMessage({ type: 'init', value: 'knock knock' });
+    } else {
+      console.error(
+        'Unable to find a valid connection for',
+        this.connectionName
+      );
     }
   }
 
@@ -48,8 +54,14 @@ class ContentScript {
    */
   addEventListener() {
     if (this.port) {
-      this.port.onMessage.addListener(this.handlePortMessage.bind(this));
+      console.debug(
+        'Adding message handler for',
+        this.connectionName,
+        'with port',
+        this.port
+      );
       this.port.onDisconnect.addListener(this.handlePortDisconnect.bind(this));
+      this.port.onMessage.addListener(this.handlePortMessage.bind(this));
       window.addEventListener('message', this.handleWindowMessage.bind(this));
     }
   }
@@ -60,14 +72,34 @@ class ContentScript {
   handlePortMessage(message) {
     if (message && message.token) {
       this.token = message.token;
-      this.connected = true;
+      if (!this.connected) {
+        this.handlePortConnect();
+      }
     }
+  }
+
+  /**
+   * Handles Connects of the port.
+   */
+  handlePortConnect() {
+    console.debug('Connection', this.connectionName, 'is connected.');
+    this.connected = true;
   }
 
   /**
    * Handles disconnects of the port.
    */
   handlePortDisconnect() {
+    if (chrome.runtime.lastError) {
+      console.error(
+        'Connection',
+        this.connectionName,
+        'is disconnected, because of error:',
+        chrome.runtime.lastError.message
+      );
+    } else {
+      console.debug('Connection', this.connectionName, 'is disconnected!');
+    }
     this.connected = false;
   }
 

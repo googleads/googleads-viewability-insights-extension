@@ -29,8 +29,11 @@ const toolbar = new Toolbar();
 
 messageHandler.addStatusbarReference(statusbar);
 messageHandler.addReportReference(report);
-
 messageHandler.addEventListener();
+
 document.addEventListener('DOMContentLoaded', () => {
   toolbar.addEventListener();
+  if (chrome.extension.inIncognitoContext) {
+    document.querySelector('#incognito-note').style.display = 'inline-block';
+  }
 });

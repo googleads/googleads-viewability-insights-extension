@@ -44,11 +44,18 @@ class Toolbar {
   }
 
   /**
-   * @param {*} event
+   * @param {event} event
    */
   reloadPage(event) {
-    console.debug('Reload page', event);
-    chrome.devtools.inspectedWindow.reload();
+    if (event && chrome.devtools.inspectedWindow.tabId) {
+      console.debug(
+        'Request to reload window tab',
+        chrome.devtools.inspectedWindow.tabId
+      );
+      chrome.devtools.inspectedWindow.reload();
+    } else {
+      console.error('Unable to reload inspected window!');
+    }
   }
 
   /**

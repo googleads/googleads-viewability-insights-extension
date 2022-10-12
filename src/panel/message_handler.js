@@ -29,6 +29,7 @@ class MessageHandler {
    * @constructor
    */
   constructor() {
+    this.connectionName = 'viewability-insights';
     this.port = null;
     this.report = null;
     this.sender = null;
@@ -42,6 +43,7 @@ class MessageHandler {
    * Adds the message connect event listener to handle all messages.
    */
   addEventListener() {
+    console.debug('Adding message handler for', this.connectionName);
     chrome.runtime.onConnect.addListener(this.handleConnect.bind(this));
   }
 
@@ -84,14 +86,15 @@ class MessageHandler {
     }
 
     // Ignore events from other names.
-    if (port.name != 'viewability-insights') {
+    if (port.name != this.connectionName) {
       return;
     }
 
     this.connected = false;
 
     // Add Message Listener
-    port.onMessage.addListener(this.handleMessage.bind(this));
+    this.port.onDisconnect.addListener(this.handlePortDisconnect.bind(this));
+    this.port.onMessage.addListener(this.handleMessage.bind(this));
 
     // Inject and init Script
     ScriptHandler.injectScript(this.tabId, this.token);
@@ -139,6 +142,31 @@ class MessageHandler {
     if (this.statusbar) {
       this.statusbar.setConnectStatus(this.connected);
     }
+  }
+
+  /**
+   * Handles Connects of the port.
+   */
+  handlePortConnect() {
+    console.debug('Connection', this.connectionName, 'is connected.');
+    this.connected = true;
+  }
+
+  /**
+   * Handles disconnects of the port.
+   */
+  handlePortDisconnect() {
+    if (chrome.runtime.lastError) {
+      console.error(
+        'Connection',
+        this.connectionName,
+        'is disconnected, because of error:',
+        chrome.runtime.lastError.message
+      );
+    } else {
+      console.debug('Connection', this.connectionName, 'is disconnected!');
+    }
+    this.connected = false;
   }
 
   /**
@@ -209,7 +237,7 @@ class MessageHandler {
    */
   handleInitMessage(message) {
     if (message.value && message.value == 'knock knock') {
-      this.connected = true;
+      this.handlePortConnect();
       this.port.postMessage({ token: this.token });
       if (this.report) {
         this.report.clear();

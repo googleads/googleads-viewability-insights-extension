@@ -15,9 +15,10 @@
  */
 
 body {
+  counter-reset: reversed(section);
   display: flex;
   flex-flow: column;
-  font-family: 'Segoe UI', Tahoma, sans-serif;
+  font-family: 'Helvetica Neue', 'Segoe UI', Tahoma, sans-serif;
   font-size: 12px;
   height: 100vh;
   margin: 0;
@@ -44,6 +45,19 @@ body {
   color: rgb(217, 48, 37);
 }
 
+#feedback {
+  border-radius: 5px;
+  border: 1px solid rgb(202, 205, 209);
+  color: rgb(26, 115, 232);
+  float: right;
+  padding: 4px 12px;
+}
+
+#feedback .material-icons {
+  font-size: 16px;
+  vertical-align: middle;
+}
+
 #starting-note {
   padding: 10px;
   font-size: 13px;
@@ -58,7 +72,7 @@ body {
 
 #starting-note ol {
   display: block;
-  list-style-type: decimal;
+  list-style-type: none;
   margin-block-start: 1em;
   margin-block-end: 1em;
   margin-inline-start: 0px;
@@ -67,6 +81,7 @@ body {
 }
 
 #starting-note li {
+  counter-increment: section;
   font-size: 13px;
   letter-spacing: 0.03em;
   line-height: 1.54;
@@ -78,6 +93,34 @@ body {
   font-size: 20px;
   vertical-align: bottom;
   border: 1px solid #ccc;
+}
+
+#starting-note li:before {
+  align-items: center;
+  background: rgba(26, 115, 232, 0.25);
+  border-radius: 50%;
+  box-sizing: border-box;
+  color: rgb(26, 115, 232);
+  content: counter(section);
+  display: flex;
+  font-size: 12px;
+  height: 18px;
+  justify-content: center;
+  left: -30px;
+  line-height: 20px;
+  position: absolute;
+  text-align: center;
+  top: 0px;
+  width: 18px;
+}
+
+#incognito-note {
+  display: none;
+  background: yellow;
+  border-radius: 5px;
+  border: 1px solid red;
+  color: red;
+  padding: 10px;
 }
 
 #report {
