@@ -32,7 +32,10 @@ exports.devtoolsPageConfig = {
       filename: '[name].html',
     }),
     new CopyWebpackPlugin({
-      patterns: [{ from: './src/manifest.json' }],
+      patterns: [
+        { from: './src/manifest.json' },
+        { from: './assets/images'},
+      ],
     }),
   ],
   output: {

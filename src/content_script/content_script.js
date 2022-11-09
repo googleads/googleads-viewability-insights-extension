@@ -83,6 +83,14 @@ class ContentScript {
    */
   handlePortConnect() {
     console.debug('Connection', this.connectionName, 'is connected.');
+    if (chrome.runtime.lastError) {
+      console.error(
+        'Connection',
+        this.connectionName,
+        'error:',
+        chrome.runtime.lastError.message
+      );
+    }
     this.connected = true;
   }
 
@@ -90,17 +98,18 @@ class ContentScript {
    * Handles disconnects of the port.
    */
   handlePortDisconnect() {
-    if (chrome.runtime.lastError) {
+    if (chrome.runtime.lastError && this.connected) {
       console.error(
         'Connection',
         this.connectionName,
         'is disconnected, because of error:',
         chrome.runtime.lastError.message
       );
-    } else {
+      this.connected = false;
+    } else if (this.connected) {
       console.debug('Connection', this.connectionName, 'is disconnected!');
+      this.connected = false;
     }
-    this.connected = false;
   }
 
   /**

@@ -276,12 +276,22 @@ export default class ViewabilityInsights {
       } else if (
         Array.isArray(size) &&
         size.length == 2 &&
-        size[0] > 1 &&
-        size[1] > 1
+        Number.isInteger(size[0]) &&
+        Number.isInteger(size[1])
       ) {
-        overlay.style.width = size[0] + 'px';
-        overlay.style.height = size[1] + 'px';
+        if (size[0] > 1) {
+          overlay.style.width = size[0] + 'px';
+        }
+        if (size[1] > 1) {
+          overlay.style.height = size[1] + 'px';
+        }
       } else {
+        console.debug(
+          'Unable to parse ad slot size for',
+          elementId,
+          'from',
+          size
+        );
         overlay.style.width = null;
         overlay.style.height = null;
       }

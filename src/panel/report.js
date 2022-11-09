@@ -176,6 +176,11 @@ class Report {
       row.cells[CellContent.AdUnit].innerText = slot.adUnitPath;
     }
 
+    // Update slot size, if needed.
+    if (typeof slot.size != 'undefined') {
+      row.cells[CellContent.Size].innerText = slot.size;
+    }
+
     // Update visibility, if needed.
     if (typeof slot.visibility != 'undefined') {
       row.cells[CellContent.CurrentViewability].innerText = slot.visibility;

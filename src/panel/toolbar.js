@@ -26,6 +26,7 @@ class Toolbar {
    */
   constructor() {
     this.enabled = true;
+    this.report = null;
   }
 
   /**
@@ -44,6 +45,14 @@ class Toolbar {
   }
 
   /**
+   * Adds report reference for easier access.
+   * @param {Report} report
+   */
+  addReportReference(report) {
+    this.report = report;
+  }
+
+  /**
    * @param {event} event
    */
   reloadPage(event) {
@@ -52,6 +61,9 @@ class Toolbar {
         'Request to reload window tab',
         chrome.devtools.inspectedWindow.tabId
       );
+      if (this.report) {
+        this.report.clear();
+      }
       chrome.devtools.inspectedWindow.reload();
     } else {
       console.error('Unable to reload inspected window!');

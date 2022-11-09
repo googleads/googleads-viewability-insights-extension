@@ -14,4 +14,11 @@
  * limitations under the License.
  */
 
-chrome.devtools.panels.create('Viewability insights', null, 'panel_page.html');
+chrome.devtools.panels.create(
+  'Viewability insights',
+  'logo_48px.png',
+  'panel_page.html',
+  (panel) => {
+    console.log('Added Viewability insights panel', panel);
+  }
+);

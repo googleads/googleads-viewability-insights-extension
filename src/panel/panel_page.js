@@ -15,7 +15,8 @@
  */
 
 import './../../assets/panel/panel_page.css';
-import './../../node_modules/@material-design-icons/font';
+import './../../node_modules/@material-design-icons/font/filled.css';
+import './../../node_modules/@material-design-icons/font/outlined.css';
 
 import { MessageHandler } from './message_handler';
 import { Report } from './report';
@@ -30,6 +31,7 @@ const toolbar = new Toolbar();
 messageHandler.addStatusbarReference(statusbar);
 messageHandler.addReportReference(report);
 messageHandler.addEventListener();
+toolbar.addReportReference(report);
 
 document.addEventListener('DOMContentLoaded', () => {
   toolbar.addEventListener();
