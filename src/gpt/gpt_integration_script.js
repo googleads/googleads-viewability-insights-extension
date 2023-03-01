@@ -181,7 +181,7 @@ export default class ViewabilityInsights {
       value: this.slotRendererEndedCount,
     });
 
-    // Calculate slots reloads.
+    // Calculate slots reloads and adjust overlay, if needed.
     if (slotElementId in this.knownAdsSlots) {
       this.slotReloadedCount++;
       window.postMessage({
@@ -189,6 +189,7 @@ export default class ViewabilityInsights {
         token: this.token,
         value: this.slotReloadedCount,
       });
+      this.updateViewbilityOverlay(slotElementId);
     } else {
       this.knownAdsSlots[slotElementId] = true;
     }
@@ -227,6 +228,84 @@ export default class ViewabilityInsights {
 
   /**
    * @param {string} elementId
+   */
+  updateViewbilityOverlay(elementId) {
+    const overlayElementId = 'viewability-overlay-' + elementId;
+    const overlayElement = document.getElementById(overlayElementId);
+    if (!overlayElement) {
+      return;
+    }
+    const parentElement = overlayElement.parentElement;
+    if (!parentElement) {
+      return;
+    }
+
+    // Check if we could use the active view viewability container.
+    // If not, try to use google_ads_iframe instead.
+    const activeViewContainers = parentElement.getElementsByClassName(
+      'GoogleActiveViewInnerContainer'
+    );
+    if (activeViewContainers.length == 1) {
+      const activeViewContainer = activeViewContainers[0];
+      overlayElement.style.width = activeViewContainer.clientWidth + 'px';
+      overlayElement.style.height = activeViewContainer.clientHeight + 'px';
+    } else {
+      const googleAdsIframeContainer =
+        this.getGoogleAdsIframeContainer(parentElement);
+      if (googleAdsIframeContainer) {
+        const googleAdsIframe = this.getGoogleAdsIframe(
+          googleAdsIframeContainer
+        );
+        if (googleAdsIframe) {
+          overlayElement.style.width = googleAdsIframe.clientWidth + 'px';
+          overlayElement.style.height = googleAdsIframe.clientHeight + 'px';
+        }
+      }
+    }
+  }
+
+  /**
+   * @param {HTMLElement} parentElement GPT Tag Element
+   * @return {HTMLElement}
+   */
+  getGoogleAdsIframeContainer(parentElement) {
+    if (parentElement && parentElement.childElementCount > 0) {
+      for (const childElement of parentElement.children) {
+        if (
+          childElement.tagName == 'DIV' &&
+          childElement.id &&
+          childElement.id.startsWith('google_ads_iframe_') &&
+          childElement.id.endsWith('__container__')
+        ) {
+          return childElement;
+        }
+      }
+    }
+    return null;
+  }
+
+  /**
+   * @param {HTMLElement} parentElement Google Ads IFrame Container
+   * @return {HTMLElement}
+   */
+  getGoogleAdsIframe(parentElement) {
+    if (parentElement && parentElement.childElementCount > 0) {
+      for (const childElement of parentElement.children) {
+        if (
+          childElement.tagName == 'IFRAME' &&
+          childElement.id &&
+          childElement.id.startsWith('google_ads_iframe_') &&
+          !childElement.id.endsWith('__container__')
+        ) {
+          return childElement;
+        }
+      }
+    }
+    return null;
+  }
+
+  /**
+   * @param {string} elementId
    * @param {null|string|number[]} size
    * @return {HTMLElement}
    */
@@ -242,9 +321,16 @@ export default class ViewabilityInsights {
       return document.getElementById(overlayElementId);
     }
 
+    // Get relevant parent Element to inject the overlay
+    const googleAdsIframeContainer =
+      this.getGoogleAdsIframeContainer(slotElement);
+    const parentElement = googleAdsIframeContainer
+      ? googleAdsIframeContainer
+      : slotElement;
+
     // Make sure to set a style.position attribute to avoid miss aligning with absolute elements.
-    if (!slotElement.style.position) {
-      slotElement.style.position = 'relative';
+    if (!parentElement.style.position) {
+      parentElement.style.position = 'relative';
     }
 
     // Construct element.
@@ -254,15 +340,41 @@ export default class ViewabilityInsights {
 
     // Handle padding of parent element, if needed.
     if (
-      window.getComputedStyle(slotElement) &&
-      window.getComputedStyle(slotElement).paddingTop &&
-      window.getComputedStyle(slotElement).paddingTop != '0px'
+      !googleAdsIframeContainer &&
+      window.getComputedStyle(parentElement) &&
+      window.getComputedStyle(parentElement).paddingTop &&
+      window.getComputedStyle(parentElement).paddingTop != '0px'
     ) {
-      overlay.style.top = window.getComputedStyle(slotElement).paddingTop;
+      overlay.style.top = window.getComputedStyle(parentElement).paddingTop;
     }
 
-    if (size) {
-      // Handle creative size with different formats, if needed.
+    // Check if we could use the active view viewability container or the Google Ads Iframe to get accurate results.
+    // If not use the passed size to adjust the layer size.
+    const activeViewContainers = parentElement.getElementsByClassName(
+      'GoogleActiveViewInnerContainer'
+    );
+    const googleAdsIframe = this.getGoogleAdsIframe(googleAdsIframeContainer);
+    if (activeViewContainers.length > 2) {
+      console.error(
+        'Found several active view container for',
+        parent,
+        'which should not be the case!'
+      );
+    } else if (activeViewContainers.length == 1) {
+      const activeViewContainer = activeViewContainers[0];
+      overlay.style.width = activeViewContainer.clientWidth + 'px';
+      overlay.style.height = activeViewContainer.clientHeight + 'px';
+      console.debug(
+        'Found Google Active View Container',
+        activeViewContainer,
+        'for',
+        overlay
+      );
+    } else if (googleAdsIframe) {
+      console.debug('Found Google Ads IFrame', googleAdsIframe, 'for', overlay);
+      overlay.style.width = googleAdsIframe.clientWidth + 'px';
+      overlay.style.height = googleAdsIframe.clientHeight + 'px';
+    } else if (size) {
       if (
         Object.prototype.toString.call(size) === '[object String]' &&
         size.includes(',') &&
@@ -303,7 +415,7 @@ export default class ViewabilityInsights {
     slotInfo.innerText = elementId;
     overlay.appendChild(slotInfo);
 
-    slotElement.appendChild(overlay);
+    parentElement.appendChild(overlay);
     return overlay;
   }
 
