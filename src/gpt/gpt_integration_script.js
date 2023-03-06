@@ -189,7 +189,7 @@ export default class ViewabilityInsights {
         token: this.token,
         value: this.slotReloadedCount,
       });
-      this.updateViewbilityOverlay(slotElementId);
+      this.updateViewbilityOverlayById(slotElementId);
     } else {
       this.knownAdsSlots[slotElementId] = true;
     }
@@ -227,48 +227,21 @@ export default class ViewabilityInsights {
   }
 
   /**
-   * @param {string} elementId
-   */
-  updateViewbilityOverlay(elementId) {
-    const overlayElementId = 'viewability-overlay-' + elementId;
-    const overlayElement = document.getElementById(overlayElementId);
-    if (!overlayElement) {
-      return;
-    }
-    const parentElement = overlayElement.parentElement;
-    if (!parentElement) {
-      return;
-    }
-
-    // Check if we could use the active view viewability container.
-    // If not, try to use google_ads_iframe instead.
-    const activeViewContainers = parentElement.getElementsByClassName(
-      'GoogleActiveViewInnerContainer'
-    );
-    if (activeViewContainers.length == 1) {
-      const activeViewContainer = activeViewContainers[0];
-      overlayElement.style.width = activeViewContainer.clientWidth + 'px';
-      overlayElement.style.height = activeViewContainer.clientHeight + 'px';
-    } else {
-      const googleAdsIframeContainer =
-        this.getGoogleAdsIframeContainer(parentElement);
-      if (googleAdsIframeContainer) {
-        const googleAdsIframe = this.getGoogleAdsIframe(
-          googleAdsIframeContainer
-        );
-        if (googleAdsIframe) {
-          overlayElement.style.width = googleAdsIframe.clientWidth + 'px';
-          overlayElement.style.height = googleAdsIframe.clientHeight + 'px';
-        }
-      }
-    }
-  }
-
-  /**
    * @param {HTMLElement} parentElement GPT Tag Element
    * @return {HTMLElement}
    */
   getGoogleAdsIframeContainer(parentElement) {
+    // Early return if we already have the container.
+    if (
+      parentElement.tagName == 'DIV' &&
+      parentElement.id &&
+      parentElement.id.startsWith('google_ads_iframe_') &&
+      parentElement.id.endsWith('__container__')
+    ) {
+      return parentElement;
+    }
+
+    // Find the container in the direct children.
     if (parentElement && parentElement.childElementCount > 0) {
       for (const childElement of parentElement.children) {
         if (
@@ -289,6 +262,17 @@ export default class ViewabilityInsights {
    * @return {HTMLElement}
    */
   getGoogleAdsIframe(parentElement) {
+    // Early return if we already have the container.
+    if (
+      parentElement.tagName == 'IFRAME' &&
+      parentElement.id &&
+      parentElement.id.startsWith('google_ads_iframe_') &&
+      !parentElement.id.endsWith('__container__')
+    ) {
+      return parentElement;
+    }
+
+    // Find the container in the direct children.
     if (parentElement && parentElement.childElementCount > 0) {
       for (const childElement of parentElement.children) {
         if (
@@ -307,6 +291,88 @@ export default class ViewabilityInsights {
   /**
    * @param {string} elementId
    * @param {null|string|number[]} size
+   */
+  updateViewbilityOverlayById(elementId, size) {
+    this.updateViewbilityOverlay(
+      document.getElementById('viewability-overlay-' + elementId),
+      size
+    );
+  }
+
+  /**
+   * @param {HTMLElement} overlayElement
+   * @param {null|string|number[]} size
+   */
+  updateViewbilityOverlay(overlayElement, size) {
+    if (!overlayElement || !overlayElement.parentElement) {
+      return;
+    }
+    const parentElement = overlayElement.parentElement;
+
+    // Try to get the correct width and height of the ad slot to display the overlay.
+    let width = 1;
+    let height = 1;
+
+    // Check if we could use the active view viewability container.
+    const activeViewContainers = parentElement.getElementsByClassName(
+      'GoogleActiveViewInnerContainer'
+    );
+    if (activeViewContainers.length == 1) {
+      const activeViewContainer = activeViewContainers[0];
+      width = activeViewContainer.clientWidth;
+      height = activeViewContainer.clientHeight;
+    }
+
+    // If we could not get the width and height from the active view container we will try to get it over the Iframe container instead.
+    const googleAdsIframeContainer =
+      this.getGoogleAdsIframeContainer(parentElement);
+    if (googleAdsIframeContainer && (width <= 1 || height <= 1)) {
+      const googleAdsIframe = this.getGoogleAdsIframe(googleAdsIframeContainer);
+      if (googleAdsIframe) {
+        width = googleAdsIframe.clientWidth;
+        height = googleAdsIframe.clientHeight;
+      }
+    }
+
+    // As last resort we will try to get the width and height from the slot size.
+    if (size) {
+      if (
+        Object.prototype.toString.call(size) === '[object String]' &&
+        size.includes(',') &&
+        size != '0,0'
+      ) {
+        const slotSizes = size.split(',');
+        if (slotSizes[0] > 0 && slotSizes[1] > 0) {
+          width = slotSizes[0];
+          height = slotSizes[1];
+        }
+      } else if (
+        Array.isArray(size) &&
+        size.length == 2 &&
+        Number.isInteger(size[0]) &&
+        Number.isInteger(size[1])
+      ) {
+        if (size[0] > 1) {
+          width = size[0];
+        }
+        if (size[1] > 1) {
+          height = size[1];
+        }
+      }
+    }
+
+    // If we a width and height greater than 1 we will adjust the overlay width and height.
+    if (width > 1) {
+      overlayElement.style.width = width + 'px';
+    }
+    if (height > 1) {
+      overlayElement.style.height = height + 'px';
+    }
+  }
+
+  /**
+   * @param {string} elementId
+   * @param {null|string|number[]} size
    * @return {HTMLElement}
    */
   getOrCreateViewabilityOverlay(elementId, size) {
@@ -318,6 +384,7 @@ export default class ViewabilityInsights {
     // Early return if overlay already exists.
     const overlayElementId = 'viewability-overlay-' + elementId;
     if (document.getElementById(overlayElementId)) {
+      this.updateViewbilityOverlayById(elementId, size);
       return document.getElementById(overlayElementId);
     }
 
@@ -348,74 +415,18 @@ export default class ViewabilityInsights {
       overlay.style.top = window.getComputedStyle(parentElement).paddingTop;
     }
 
-    // Check if we could use the active view viewability container or the Google Ads Iframe to get accurate results.
-    // If not use the passed size to adjust the layer size.
-    const activeViewContainers = parentElement.getElementsByClassName(
-      'GoogleActiveViewInnerContainer'
-    );
-    const googleAdsIframe = this.getGoogleAdsIframe(googleAdsIframeContainer);
-    if (activeViewContainers.length > 2) {
-      console.error(
-        'Found several active view container for',
-        parent,
-        'which should not be the case!'
-      );
-    } else if (activeViewContainers.length == 1) {
-      const activeViewContainer = activeViewContainers[0];
-      overlay.style.width = activeViewContainer.clientWidth + 'px';
-      overlay.style.height = activeViewContainer.clientHeight + 'px';
-      console.debug(
-        'Found Google Active View Container',
-        activeViewContainer,
-        'for',
-        overlay
-      );
-    } else if (googleAdsIframe) {
-      console.debug('Found Google Ads IFrame', googleAdsIframe, 'for', overlay);
-      overlay.style.width = googleAdsIframe.clientWidth + 'px';
-      overlay.style.height = googleAdsIframe.clientHeight + 'px';
-    } else if (size) {
-      if (
-        Object.prototype.toString.call(size) === '[object String]' &&
-        size.includes(',') &&
-        size != '0,0'
-      ) {
-        const slotSizes = size.split(',');
-        if (slotSizes[0] > 0 && slotSizes[1] > 0) {
-          overlay.style.width = slotSizes[0] + 'px';
-          overlay.style.height = slotSizes[1] + 'px';
-        }
-      } else if (
-        Array.isArray(size) &&
-        size.length == 2 &&
-        Number.isInteger(size[0]) &&
-        Number.isInteger(size[1])
-      ) {
-        if (size[0] > 1) {
-          overlay.style.width = size[0] + 'px';
-        }
-        if (size[1] > 1) {
-          overlay.style.height = size[1] + 'px';
-        }
-      } else {
-        console.debug(
-          'Unable to parse ad slot size for',
-          elementId,
-          'from',
-          size
-        );
-        overlay.style.width = null;
-        overlay.style.height = null;
-      }
-    }
-
     // Add Slot Info container
     const slotInfo = document.createElement('span');
     slotInfo.className = 'slot-info';
     slotInfo.innerText = elementId;
     overlay.appendChild(slotInfo);
 
+    // Add Viewability Info container
     parentElement.appendChild(overlay);
+
+    // Update overlay size.
+    this.updateViewbilityOverlay(overlay, size);
+
     return overlay;
   }
 
