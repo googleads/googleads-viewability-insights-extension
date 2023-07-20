@@ -15,7 +15,12 @@
  */
 
 /**
- * Handles the communication between the injected scripts <-> panel page.
+ * @author mbordihn@google.com (Markus Bordihn)
+ *
+ * @fileoverview Handles the communication between the injected scripts <-> panel page.
+ */
+
+/**
  * @class
  */
 class ContentScript {
@@ -36,7 +41,7 @@ class ContentScript {
     if (chrome.runtime.lastError) {
       console.warn(
         'Unable to init script, got error:',
-        chrome.runtime.lastError
+        chrome.runtime.lastError,
       );
     } else if (this.port) {
       this.addEventListener();
@@ -44,7 +49,7 @@ class ContentScript {
     } else {
       console.error(
         'Unable to find a valid connection for',
-        this.connectionName
+        this.connectionName,
       );
     }
   }
@@ -58,7 +63,7 @@ class ContentScript {
         'Adding message handler for',
         this.connectionName,
         'with port',
-        this.port
+        this.port,
       );
       this.port.onDisconnect.addListener(this.handlePortDisconnect.bind(this));
       this.port.onMessage.addListener(this.handlePortMessage.bind(this));
@@ -88,7 +93,7 @@ class ContentScript {
         'Connection',
         this.connectionName,
         'error:',
-        chrome.runtime.lastError.message
+        chrome.runtime.lastError.message,
       );
     }
     this.connected = true;
@@ -103,7 +108,7 @@ class ContentScript {
         'Connection',
         this.connectionName,
         'is disconnected, because of error:',
-        chrome.runtime.lastError.message
+        chrome.runtime.lastError.message,
       );
       this.connected = false;
     } else if (this.connected) {

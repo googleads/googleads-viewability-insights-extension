@@ -14,10 +14,15 @@
  * limitations under the License.
  */
 
+/**
+ * @author mbordihn@google.com (Markus Bordihn)
+ *
+ * @fileoverview Handles all toolbar related action and updates.
+ */
+
 import { ScriptHandler } from './script_handler';
 
 /**
- * Main class to handle all toolbar related action and updates.
  * @class
  */
 class Toolbar {
@@ -59,7 +64,7 @@ class Toolbar {
     if (event && chrome.devtools.inspectedWindow.tabId) {
       console.debug(
         'Request to reload window tab',
-        chrome.devtools.inspectedWindow.tabId
+        chrome.devtools.inspectedWindow.tabId,
       );
       if (this.report) {
         this.report.clear();

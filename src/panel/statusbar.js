@@ -15,7 +15,12 @@
  */
 
 /**
- * Main class to handle all statusbar related action and updates.
+ * @author mbordihn@google.com (Markus Bordihn)
+ *
+ * @fileoverview Handles all statusbar related action and updates.
+ */
+
+/**
  * @class
  */
 class Statusbar {

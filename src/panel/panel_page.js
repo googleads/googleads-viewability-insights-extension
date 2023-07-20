@@ -14,6 +14,12 @@
  * limitations under the License.
  */
 
+/**
+ * @author mbordihn@google.com (Markus Bordihn)
+ *
+ * @fileoverview Defines the panel which includes the viewability report, statusbar and toolbar.
+ */
+
 import './../../assets/panel/panel_page.css';
 import './../../node_modules/@material-design-icons/font/filled.css';
 import './../../node_modules/@material-design-icons/font/outlined.css';

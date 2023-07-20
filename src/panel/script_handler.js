@@ -14,10 +14,15 @@
  * limitations under the License.
  */
 
+/**
+ * @author mbordihn@google.com (Markus Bordihn)
+ *
+ * @fileoverview Handles all script injections into the webpage and the gpt library.
+ */
+
 import { Toolbar } from './toolbar';
 
 /**
- * Handles all script injections into the webpage and the gpt library.
  * @class
  */
 class ScriptHandler {
@@ -37,7 +42,7 @@ class ScriptHandler {
         console.log('Inject Script results:', injectionResults);
         ScriptHandler.injectStyleSheet(tabId);
         ScriptHandler.initScript(tabId, sessionToken);
-      }
+      },
     );
   }
 
@@ -53,7 +58,7 @@ class ScriptHandler {
       },
       (injectionResults) => {
         console.log('Inject StyleSheet results:', injectionResults);
-      }
+      },
     );
   }
 
@@ -76,9 +81,9 @@ class ScriptHandler {
       (injectionResults) => {
         console.log('Init Script results:', injectionResults);
         ScriptHandler.enableViewableOverlay(
-          Toolbar.shouldShowViewableOverlay()
+          Toolbar.shouldShowViewableOverlay(),
         );
-      }
+      },
     );
   }
 
@@ -91,7 +96,7 @@ class ScriptHandler {
       {
         function: function (showViewableOverlay) {
           window.viewabilityInsightsTools.enableViewableOverlay(
-            showViewableOverlay
+            showViewableOverlay,
           );
         },
         target: { tabId: chrome.devtools.inspectedWindow.tabId },
@@ -100,7 +105,7 @@ class ScriptHandler {
       },
       (injectionResults) => {
         console.log('enableViewableOverlay:', injectionResults);
-      }
+      },
     );
   }
 
@@ -122,7 +127,7 @@ class ScriptHandler {
       },
       (injectionResults) => {
         console.log('scrollIntoView:', injectionResults);
-      }
+      },
     );
   }
 }

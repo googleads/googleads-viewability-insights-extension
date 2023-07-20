@@ -14,6 +14,12 @@
  * limitations under the License.
  */
 
+/**
+ * @author mbordihn@google.com (Markus Bordihn)
+ *
+ * @fileoverview Handles all report relevant display of data and graphs.
+ */
+
 import { ScriptHandler } from './script_handler';
 
 const CellContent = {
@@ -43,7 +49,6 @@ const CellName = {
 };
 
 /**
- * Handles all report relevant display of data and graphs.
  * @class
  */
 class Report {
@@ -61,7 +66,7 @@ class Report {
     const reportTable = document.querySelector('#report > tbody');
     reportTable.parentNode.replaceChild(
       document.createElement('tbody'),
-      reportTable
+      reportTable,
     );
     this.slotCounter = 0;
   }
@@ -101,14 +106,14 @@ class Report {
       row,
       CellContent.Index,
       CellName.Index,
-      this.slotCounter + 1
+      this.slotCounter + 1,
     );
     this.insertCell_(
       row,
       CellContent.Slot,
       CellName.Slot,
       slot.slotElementId,
-      this.scrollIntoView
+      this.scrollIntoView,
     );
     this.insertCell_(row, CellContent.AdUnit, CellName.AdUnit, slot.adUnitPath);
     this.insertCell_(row, CellContent.Size, CellName.Size, slot.size);
@@ -116,25 +121,25 @@ class Report {
       row,
       CellContent.LineItem,
       CellName.LineItem,
-      slot.lineItemId || ''
+      slot.lineItemId || '',
     );
     this.insertCell_(
       row,
       CellContent.MinViewability,
       CellName.MinViewability,
-      0
+      0,
     );
     this.insertCell_(
       row,
       CellContent.MaxViewability,
       CellName.MaxViewability,
-      0
+      0,
     );
     this.insertCell_(
       row,
       CellContent.CurrentViewability,
       CellName.CurrentViewability,
-      0
+      0,
     );
     this.insertCell_(row, CellContent.Viewable, CellName.Viewable, false);
     this.insertCell_(row, CellContent.Reloads, CellName.Reloads, 0);
@@ -157,7 +162,7 @@ class Report {
     if (!row) {
       console.error(
         'Unable to create / get reporting row for',
-        slot.slotElementId
+        slot.slotElementId,
       );
       return;
     }

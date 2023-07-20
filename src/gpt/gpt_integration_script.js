@@ -15,7 +15,12 @@
  */
 
 /**
- * Handles all GPT related integration points.
+ * @author mbordihn@google.com (Markus Bordihn)
+ *
+ * @fileoverview Handles all GPT related integration points.
+ */
+
+/**
  * @class
  */
 export default class ViewabilityInsights {
@@ -54,7 +59,7 @@ export default class ViewabilityInsights {
             .pubads()
             .addEventListener(
               'impressionViewable',
-              this.impressionViewable.bind(this)
+              this.impressionViewable.bind(this),
             );
         } catch (e) {
           console.debug('Unable to add listener for impressionViewable:', e);
@@ -71,7 +76,7 @@ export default class ViewabilityInsights {
             .pubads()
             .addEventListener(
               'slotVisibilityChanged',
-              this.slotVisibilityChanged.bind(this)
+              this.slotVisibilityChanged.bind(this),
             );
         } catch (e) {
           console.debug('Unable to add listener for slotVisibilityChanged:', e);
@@ -81,7 +86,7 @@ export default class ViewabilityInsights {
             .pubads()
             .addEventListener(
               'slotRenderEnded',
-              this.slotRendererEnded.bind(this)
+              this.slotRendererEnded.bind(this),
             );
         } catch (e) {
           console.debug('Unable to add listener for slotRenderEnded:', e);
@@ -93,7 +98,7 @@ export default class ViewabilityInsights {
         } catch (e) {
           console.debug('Unable to add listener for slotOnload:', e);
         }
-      }.bind(this)
+      }.bind(this),
     );
   }
 
@@ -295,7 +300,7 @@ export default class ViewabilityInsights {
   updateViewbilityOverlayById(elementId, size) {
     this.updateViewbilityOverlay(
       document.getElementById('viewability-overlay-' + elementId),
-      size
+      size,
     );
   }
 
@@ -315,7 +320,7 @@ export default class ViewabilityInsights {
 
     // Check if we could use the active view viewability container.
     const activeViewContainers = parentElement.getElementsByClassName(
-      'GoogleActiveViewInnerContainer'
+      'GoogleActiveViewInnerContainer',
     );
     if (activeViewContainers.length == 1) {
       const activeViewContainer = activeViewContainers[0];
@@ -437,7 +442,7 @@ export default class ViewabilityInsights {
     this.showViewableOverlay = enable;
     if (!enable) {
       const elements = document.getElementsByClassName(
-        'viewability-insights-overlay'
+        'viewability-insights-overlay',
       );
       while (elements.length > 0) {
         elements[0].parentNode.removeChild(elements[0]);

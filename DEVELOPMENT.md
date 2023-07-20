@@ -11,7 +11,7 @@ npm install
 To get additional insights and logging message you need to use the following commands:
 
 ```sh
-npm build:dev
+npm run build:dev
 ```
 
 The compiled dev output will be in the **dist** folder.
@@ -21,7 +21,7 @@ The compiled dev output will be in the **dist** folder.
 To get the user version you need to use the following commands:
 
 ```sh
-npm build
+npm run build
 ```
 
 The compiled prod output will be in the **dist** folder.

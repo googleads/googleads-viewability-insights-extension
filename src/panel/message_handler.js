@@ -14,14 +14,18 @@
  * limitations under the License.
  */
 
-import { ScriptHandler } from './script_handler';
-
 /**
- * Handles all messages for the communication between the:
+ * @author mbordihn@google.com (Markus Bordihn)
+ *
+ * @fileoverview Handles all messages for the communication between the:
  * - Panel Page
  * - Content Script
  * - Injected Script
- *
+ */
+
+import { ScriptHandler } from './script_handler';
+
+/**
  * @class
  */
 class MessageHandler {
@@ -161,7 +165,7 @@ class MessageHandler {
         'Connection',
         this.connectionName,
         'is disconnected, because of error:',
-        chrome.runtime.lastError.message
+        chrome.runtime.lastError.message,
       );
     } else {
       console.debug('Connection', this.connectionName, 'is disconnected!');

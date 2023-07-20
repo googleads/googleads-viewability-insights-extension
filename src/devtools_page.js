@@ -14,11 +14,17 @@
  * limitations under the License.
  */
 
+/**
+ * @author mbordihn@google.com (Markus Bordihn)
+ *
+ * @fileoverview Defines and creates the Chrome dev tools panel.
+ */
+
 chrome.devtools.panels.create(
   'Viewability insights',
   'logo_48px.png',
   'panel_page.html',
   (panel) => {
     console.log('Added Viewability insights panel', panel);
-  }
+  },
 );
