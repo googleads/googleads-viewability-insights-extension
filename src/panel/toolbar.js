@@ -44,9 +44,6 @@ class Toolbar {
     document
       .querySelector('#checkbox-show-viewable-overlay')
       .addEventListener('change', this.showViewableOverlay.bind(this));
-    document
-      .querySelector('#checkbox-show-active-view-elements')
-      .addEventListener('change', this.showActiveViewElements.bind(this));
   }
 
   /**
@@ -81,13 +78,6 @@ class Toolbar {
   showViewableOverlay(event) {
     console.debug('Show Viewable Overlay', event.currentTarget.checked);
     ScriptHandler.enableViewableOverlay(event.currentTarget.checked);
-  }
-
-  /**
-   * @param {*} event
-   */
-  showActiveViewElements(event) {
-    console.debug('Show Active View Elements', event.currentTarget.checked);
   }
 
   /**

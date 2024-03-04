@@ -44,6 +44,7 @@ export default class ViewabilityInsights {
    */
   addEventListener() {
     window.googletag = window.googletag || { cmd: [] };
+    googletag.cmd = googletag.cmd || [];
     googletag.cmd.push(
       function () {
         // Send the version string first, so that we know we are connected.
@@ -108,6 +109,7 @@ export default class ViewabilityInsights {
   impressionViewable(event) {
     this.viewableImpressionCount++;
     const slotElementId = event.slot.getSlotElementId();
+    console.debug('Ad Slot', slotElementId, 'is viewable');
     if (this.showViewableOverlay) {
       const overlay = this.getOrCreateViewabilityOverlay(slotElementId);
       if (overlay) {
@@ -146,6 +148,13 @@ export default class ViewabilityInsights {
    */
   slotVisibilityChanged(event) {
     const slotElementId = event.slot.getSlotElementId();
+    console.debug(
+      'Visibility of ad slot',
+      slotElementId,
+      'changed to',
+      event.inViewPercentage,
+      '%',
+    );
     window.postMessage({
       type: 'ads-slot-visibility',
       token: this.token,
@@ -396,9 +405,7 @@ export default class ViewabilityInsights {
     // Get relevant parent Element to inject the overlay
     const googleAdsIframeContainer =
       this.getGoogleAdsIframeContainer(slotElement);
-    const parentElement = googleAdsIframeContainer
-      ? googleAdsIframeContainer
-      : slotElement;
+    const parentElement = googleAdsIframeContainer || slotElement;
 
     // Make sure to set a style.position attribute to avoid miss aligning with absolute elements.
     if (!parentElement.style.position) {
