@@ -16,8 +16,7 @@
 
 /**
  * @author mbordihn@google.com (Markus Bordihn)
- *
- * @fileoverview Handles all GPT related integration points.
+ * @file Handles all GPT related integration points.
  */
 
 /**
@@ -25,8 +24,8 @@
  */
 export default class ViewabilityInsights {
   /**
-   * @param {string} token
-   * @constructor
+   * @param {string} token Session Token for the current session
+   * @class
    */
   constructor(token) {
     this.knownAdsSlots = {};
@@ -104,7 +103,7 @@ export default class ViewabilityInsights {
   }
 
   /**
-   * @param {googletag.events.ImpressionViewableEvent} event
+   * @param {googletag.events.ImpressionViewableEvent} event Impression Viewable Event
    */
   impressionViewable(event) {
     this.viewableImpressionCount++;
@@ -132,7 +131,7 @@ export default class ViewabilityInsights {
   }
 
   /**
-   * @param {googletag.events.SlotRequestedEvent} event
+   * @see {googletag.events.SlotRequestedEvent}
    */
   slotRequested() {
     this.slotRequestedCount++;
@@ -144,7 +143,7 @@ export default class ViewabilityInsights {
   }
 
   /**
-   * @param {googletag.events.SlotVisibilityChangedEvent} event
+   * @param {googletag.events.SlotVisibilityChangedEvent} event Slot Visibility Changed Event
    */
   slotVisibilityChanged(event) {
     const slotElementId = event.slot.getSlotElementId();
@@ -169,7 +168,7 @@ export default class ViewabilityInsights {
   }
 
   /**
-   * @param {googletag.events.SlotRenderEndedEvent} event
+   * @param {googletag.events.SlotRenderEndedEvent} event Slot Render Ended Event
    */
   slotRendererEnded(event) {
     if (event.isEmpty) {
@@ -215,7 +214,7 @@ export default class ViewabilityInsights {
   }
 
   /**
-   * @param {googletag.events.SlotOnloadEvent} event
+   * @param {googletag.events.SlotOnloadEvent} event Slot Onload Event
    */
   slotOnload(event) {
     const responseInformation = event.slot.getResponseInformation();
@@ -242,7 +241,38 @@ export default class ViewabilityInsights {
 
   /**
    * @param {HTMLElement} parentElement GPT Tag Element
-   * @return {HTMLElement}
+   * @returns {HTMLElement} Google Active View Inner Container
+   */
+  getGoogleActiveViewInnerContainer(parentElement) {
+    const activeViewContainers = parentElement.getElementsByClassName(
+      'GoogleActiveViewInnerContainer',
+    );
+    if (activeViewContainers.length == 1) {
+      return activeViewContainers[0];
+    }
+
+    // Alternative check if we could get it from the iFrame Container.
+    const googleAdsIframeContainer = this.getGoogleAdsIframe(parentElement);
+    if (
+      googleAdsIframeContainer &&
+      googleAdsIframeContainer.contentWindow?.document?.body?.getElementsByClassName(
+        'GoogleActiveViewInnerContainer',
+      ) &&
+      googleAdsIframeContainer.contentWindow.document.body.getElementsByClassName(
+        'GoogleActiveViewInnerContainer',
+      ).length == 1
+    ) {
+      return googleAdsIframeContainer.contentWindow.document.body.getElementsByClassName(
+        'GoogleActiveViewInnerContainer',
+      )[0];
+    }
+
+    return null;
+  }
+
+  /**
+   * @param {HTMLElement} parentElement GPT Tag Element
+   * @returns {HTMLElement} Google Ads IFrame Container
    */
   getGoogleAdsIframeContainer(parentElement) {
     // Early return if we already have the container.
@@ -273,7 +303,7 @@ export default class ViewabilityInsights {
 
   /**
    * @param {HTMLElement} parentElement Google Ads IFrame Container
-   * @return {HTMLElement}
+   * @returns {HTMLElement} Google Ads IFrame
    */
   getGoogleAdsIframe(parentElement) {
     // Early return if we already have the container.
@@ -303,8 +333,8 @@ export default class ViewabilityInsights {
   }
 
   /**
-   * @param {string} elementId
-   * @param {null|string|number[]} size
+   * @param {string} elementId Slot Element ID
+   * @param {null|string|number[]} size Slot Size
    */
   updateViewbilityOverlayById(elementId, size) {
     this.updateViewbilityOverlay(
@@ -314,27 +344,30 @@ export default class ViewabilityInsights {
   }
 
   /**
-   * @param {HTMLElement} overlayElement
-   * @param {null|string|number[]} size
+   * @param {HTMLElement} overlayElement Viewability Overlay Element
+   * @param {null|string|number[]} size Slot Size
    */
   updateViewbilityOverlay(overlayElement, size) {
     if (!overlayElement || !overlayElement.parentElement) {
       return;
     }
-    const parentElement = overlayElement.parentElement;
-
     // Try to get the correct width and height of the ad slot to display the overlay.
+    const parentElement = overlayElement.parentElement;
     let width = 1;
     let height = 1;
 
     // Check if we could use the active view viewability container.
-    const activeViewContainers = parentElement.getElementsByClassName(
-      'GoogleActiveViewInnerContainer',
-    );
-    if (activeViewContainers.length == 1) {
-      const activeViewContainer = activeViewContainers[0];
+    const activeViewContainer =
+      this.getGoogleActiveViewInnerContainer(parentElement);
+    if (activeViewContainer) {
       width = activeViewContainer.clientWidth;
       height = activeViewContainer.clientHeight;
+      console.debug(
+        'Updating Viewability Overlay',
+        overlayElement,
+        'with Google Active View Inner Container',
+        activeViewContainer,
+      );
     }
 
     // If we could not get the width and height from the active view container we will try to get it over the Iframe container instead.
@@ -345,11 +378,23 @@ export default class ViewabilityInsights {
       if (googleAdsIframe) {
         width = googleAdsIframe.clientWidth;
         height = googleAdsIframe.clientHeight;
+        console.debug(
+          'Updating Viewability Overlay',
+          overlayElement,
+          'with Google Ads Iframe',
+          googleAdsIframe,
+        );
       }
     }
 
     // As last resort we will try to get the width and height from the slot size.
-    if (size) {
+    if ((width <= 1 || height <= 1) && size) {
+      console.debug(
+        'Updating Viewability Overlay',
+        overlayElement,
+        'with Size',
+        size,
+      );
       if (
         Object.prototype.toString.call(size) === '[object String]' &&
         size.includes(',') &&
@@ -375,7 +420,18 @@ export default class ViewabilityInsights {
       }
     }
 
-    // If we a width and height greater than 1 we will adjust the overlay width and height.
+    // Early return and warning message if we are unable to detect any size.
+    if (width <= 1 && height <= 1) {
+      console.warn(
+        'Unable to update Viewability overlay',
+        overlayElement,
+        'for',
+        parentElement,
+      );
+      return;
+    }
+
+    // If the width and height is greater than 1 we will adjust the overlay width and height.
     if (width > 1) {
       overlayElement.style.width = width + 'px';
     }
@@ -385,14 +441,14 @@ export default class ViewabilityInsights {
   }
 
   /**
-   * @param {string} elementId
-   * @param {null|string|number[]} size
-   * @return {HTMLElement}
+   * @param {string} elementId Slot Element ID
+   * @param {null|string|number[]} size Slot Size
+   * @returns {HTMLDivElement} Viewability Overlay Element
    */
   getOrCreateViewabilityOverlay(elementId, size) {
     const slotElement = document.getElementById(elementId);
     if (!slotElement) {
-      return;
+      return null;
     }
 
     // Early return if overlay already exists.
@@ -443,7 +499,7 @@ export default class ViewabilityInsights {
   }
 
   /**
-   * @param {boolean} enable
+   * @param {boolean} enable Enable Viewable Overlay
    */
   enableViewableOverlay(enable) {
     this.showViewableOverlay = enable;

@@ -16,8 +16,7 @@
 
 /**
  * @author mbordihn@google.com (Markus Bordihn)
- *
- * @fileoverview Defines and creates the Chrome dev tools panel.
+ * @file Defines and creates the Chrome dev tools panel.
  */
 
 chrome.devtools.panels.create(
@@ -26,5 +25,13 @@ chrome.devtools.panels.create(
   'panel_page.html',
   (panel) => {
     console.log('Added Viewability insights panel', panel);
+  },
+);
+
+chrome.devtools.panels.elements.createSidebarPane(
+  'Ad Request Details',
+  function (sidebar) {
+    sidebar.setPage('ad_request_details.html');
+    sidebar.setHeight('8ex');
   },
 );

@@ -14,23 +14,7 @@
  * limitations under the License.
  */
 
-const { merge } = require('webpack-merge');
-const common = require('./webpack.common.js');
-
-module.exports = [
-  merge(common.devtoolsPageConfig, {
-    mode: 'production',
-  }),
-  merge(common.panelPageConfig, {
-    mode: 'production',
-  }),
-  merge(common.contentScriptConfig, {
-    mode: 'production',
-  }),
-  merge(common.adRequestDetailsSidebarConfig, {
-    mode: 'production',
-  }),
-  merge(common.gptIntegrationScriptConfig, {
-    mode: 'production',
-  }),
-];
+/**
+ * @author mbordihn@google.com (Markus Bordihn)
+ * @file Ad Requests details sidebar.
+ */

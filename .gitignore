@@ -14,3 +14,4 @@ dist
 node_modules
 npm-debug.log*
 test/genfiles
+googleads-viewability-insights-extension.zip

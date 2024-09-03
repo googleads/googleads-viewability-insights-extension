@@ -16,8 +16,7 @@
 
 /**
  * @author mbordihn@google.com (Markus Bordihn)
- *
- * @fileoverview Handles all statusbar related action and updates.
+ * @file Handles all statusbar related action and updates.
  */
 
 /**
@@ -25,7 +24,7 @@
  */
 class Statusbar {
   /**
-   * @constructor
+   * @class
    */
   constructor() {
     this.adsSlotsLoaded = 0;
@@ -53,58 +52,58 @@ class Statusbar {
   }
 
   /**
-   * @param {number} value
+   * @param {number} numAdsSlotsLoaded Number of ads slots loaded.
    */
-  setAdsSlotsLoaded(value) {
-    this.adsSlotsLoaded = value || 0;
+  setAdsSlotsLoaded(numAdsSlotsLoaded) {
+    this.adsSlotsLoaded = numAdsSlotsLoaded || 0;
     document.querySelector('#text-num-ads-slots-loaded').textContent =
       this.adsSlotsLoaded;
     this.updateAdsSlotsViewability();
   }
 
   /**
-   * @param {number} value
+   * @param {number} numAdsSlotsRequested Number of ads slots requested.
    */
-  setAdsSlotsRequested(value) {
-    this.adsSlotsRequested = value || 0;
+  setAdsSlotsRequested(numAdsSlotsRequested) {
+    this.adsSlotsRequested = numAdsSlotsRequested || 0;
     document.querySelector('#text-num-ads-slots-requested').textContent =
       this.adsSlotsRequested;
   }
 
   /**
-   * @param {number} value
+   * @param {number} numAdsSlotsRendered Number of ads slots rendered.
    */
-  setAdsSlotsRendered(value) {
-    this.adsSlotsRendered = value || 0;
+  setAdsSlotsRendered(numAdsSlotsRendered) {
+    this.adsSlotsRendered = numAdsSlotsRendered || 0;
     document.querySelector('#text-num-ads-slots-rendered').textContent =
       this.adsSlotsRendered;
     this.updateAdsSlotsViewability();
   }
 
   /**
-   * @param {number} value
+   * @param {number} numAdsSlotsReload Number of ads slots reloaded.
    */
-  setAdsSlotsReloaded(value) {
-    this.adsSlotsReloaded = value || 0;
+  setAdsSlotsReloaded(numAdsSlotsReload) {
+    this.adsSlotsReloaded = numAdsSlotsReload || 0;
     document.querySelector('#text-num-ads-slots-reload').textContent =
       this.adsSlotsReloaded;
   }
 
   /**
-   * @param {number} value
+   * @param {number} numAdsSlotsViewable Number of ads slots viewable.
    */
-  setAdsSlotsViewable(value) {
-    this.adsSlotsViewable = value || 0;
+  setAdsSlotsViewable(numAdsSlotsViewable) {
+    this.adsSlotsViewable = numAdsSlotsViewable || 0;
     document.querySelector('#text-num-ads-slots-visible').textContent =
       this.adsSlotsViewable;
     this.updateAdsSlotsViewability();
   }
 
   /**
-   * @param {number} value
+   * @param {number} detectedGptVersion Detected GPT version.
    */
-  setGptVersion(value) {
-    this.gptVersion = value;
+  setGptVersion(detectedGptVersion) {
+    this.gptVersion = detectedGptVersion;
     document.querySelector('#text-gpt-version').textContent = this.gptVersion
       ? 'v' + this.gptVersion
       : '-';
@@ -119,10 +118,10 @@ class Statusbar {
   }
 
   /**
-   * @param {boolean} value
+   * @param {boolean} isConnected Connection status.
    */
-  setConnectStatus(value) {
-    this.connected = value ? true : false;
+  setConnectStatus(isConnected) {
+    this.connected = isConnected ? true : false;
     document
       .querySelector('#icon-connect-status')
       .classList.toggle('connected', this.connected);

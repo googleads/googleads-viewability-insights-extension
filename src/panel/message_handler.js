@@ -16,21 +16,23 @@
 
 /**
  * @author mbordihn@google.com (Markus Bordihn)
- *
- * @fileoverview Handles all messages for the communication between the:
+ * @file Handles all messages for the communication between the:
  * - Panel Page
  * - Content Script
  * - Injected Script
  */
 
 import { ScriptHandler } from './script_handler';
+import { Report } from './report';
+import { Toolbar } from './toolbar';
+import { Statusbar } from './statusbar';
 
 /**
  * @class
  */
 class MessageHandler {
   /**
-   * @constructor
+   * @class
    */
   constructor() {
     this.connectionName = 'viewability-insights';
@@ -53,7 +55,7 @@ class MessageHandler {
 
   /**
    * Adds toolbar reference for easier access.
-   * @param {Toolbar} toolbar
+   * @param {Toolbar} toolbar Toolbar instance
    */
   addToolbarReference(toolbar) {
     this.toolbar = toolbar;
@@ -61,7 +63,7 @@ class MessageHandler {
 
   /**
    * Adds statusbar reference for easier access.
-   * @param {Status} statusbar
+   * @param {Statusbar} statusbar Statusbar instance
    */
   addStatusbarReference(statusbar) {
     this.statusbar = statusbar;
@@ -69,14 +71,14 @@ class MessageHandler {
 
   /**
    * Adds report reference for easier access.
-   * @param {Report} report
+   * @param {Report} report Report instance
    */
   addReportReference(report) {
     this.report = report;
   }
 
   /**
-   * @param {Port} port
+   * @param {?} port Connection port.
    * @see https://developer.chrome.com/docs/extensions/reference/runtime/#event-onConnect
    */
   handleConnect(port) {
@@ -105,7 +107,7 @@ class MessageHandler {
   }
 
   /**
-   * @param {function} message
+   * @param {Function} message Callback function for messages.
    * @see https://developer.chrome.com/docs/extensions/reference/runtime/#event-onMessage
    */
   handleMessage(message) {
@@ -174,7 +176,7 @@ class MessageHandler {
   }
 
   /**
-   * @param {Object} message
+   * @param {object} message Ad Slot rendered Message
    */
   handleAdsSlotRendered(message) {
     if (this.report && message.value) {
@@ -183,7 +185,7 @@ class MessageHandler {
   }
 
   /**
-   * @param {Object} message
+   * @param {object} message Ad Slot loaded Message
    */
   handleAdsSlotsLoaded(message) {
     if (this.statusbar) {
@@ -192,7 +194,7 @@ class MessageHandler {
   }
 
   /**
-   * @param {Object} message
+   * @param {object} message Ad Slot requested Message
    */
   handleAdsSlotsRequested(message) {
     if (this.statusbar) {
@@ -201,7 +203,7 @@ class MessageHandler {
   }
 
   /**
-   * @param {Object} message
+   * @param {object} message Ad Slot rendered Message
    */
   handleAdsSlotsRendered(message) {
     if (this.statusbar) {
@@ -210,7 +212,7 @@ class MessageHandler {
   }
 
   /**
-   * @param {Object} message
+   * @param {object} message Ad Slot reloaded Message
    */
   handleAdsSlotsReloaded(message) {
     if (this.statusbar && message.value) {
@@ -219,7 +221,7 @@ class MessageHandler {
   }
 
   /**
-   * @param {Object} message
+   * @param {object} message Ad Slot viewable Message
    */
   handleAdsSlotsViewable(message) {
     if (this.statusbar) {
@@ -228,7 +230,7 @@ class MessageHandler {
   }
 
   /**
-   * @param {Object} message
+   * @param {object} message Report Updates Message
    */
   handleReportUpdates(message) {
     if (this.report && message.value) {
@@ -237,7 +239,7 @@ class MessageHandler {
   }
 
   /**
-   * @param {Object} message
+   * @param {object} message Init Message
    */
   handleInitMessage(message) {
     if (message.value && message.value == 'knock knock') {
@@ -253,7 +255,7 @@ class MessageHandler {
   }
 
   /**
-   * @param {Object} message
+   * @param {object} message Version Message
    */
   handleVersionMessage(message) {
     if (this.statusbar) {
@@ -262,8 +264,8 @@ class MessageHandler {
   }
 
   /**
-   * @param {string} command
-   * @param {Object} value
+   * @param {string} command Command to execute
+   * @param {object} value Value for the command
    */
   postCommand(command, value) {
     if (this.port) {

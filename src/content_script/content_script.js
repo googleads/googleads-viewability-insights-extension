@@ -16,8 +16,7 @@
 
 /**
  * @author mbordihn@google.com (Markus Bordihn)
- *
- * @fileoverview Handles the communication between the injected scripts <-> panel page.
+ * @file Handles the communication between the injected scripts <-> panel page.
  */
 
 /**
@@ -25,7 +24,7 @@
  */
 class ContentScript {
   /**
-   * @constructor
+   * @class
    */
   constructor() {
     this.connectionName = 'viewability-insights';
@@ -72,7 +71,7 @@ class ContentScript {
   }
 
   /**
-   * @param {*} message
+   * @param {*} message Message
    */
   handlePortMessage(message) {
     if (message && message.token) {
@@ -118,7 +117,7 @@ class ContentScript {
   }
 
   /**
-   * @param {MessageEvent} event
+   * @param {MessageEvent} event Message Event
    */
   handleWindowMessage(event) {
     // Ignore all window message without any or valid token.

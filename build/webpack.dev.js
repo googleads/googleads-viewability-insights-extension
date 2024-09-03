@@ -30,6 +30,10 @@ module.exports = [
     mode: 'development',
     devtool: 'inline-source-map',
   }),
+  merge(common.adRequestDetailsSidebarConfig, {
+    mode: 'development',
+    devtool: 'inline-source-map',
+  }),
   merge(common.gptIntegrationScriptConfig, {
     mode: 'development',
     devtool: 'inline-source-map',

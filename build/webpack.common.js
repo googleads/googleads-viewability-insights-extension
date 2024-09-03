@@ -76,6 +76,37 @@ exports.panelPageConfig = {
   },
 };
 
+exports.adRequestDetailsSidebarConfig = {
+  name: 'ad_request_details',
+  target: 'web',
+  entry: {
+    ad_request_details: ['./src/sidebar/ad_request_details.js'],
+  },
+  plugins: [
+    new MiniCssExtractPlugin({
+      filename: '[name].css',
+      chunkFilename: '[id].css',
+    }),
+    new HtmlWebpackPlugin({
+      template: 'assets/sidebar/ad_request_details.html',
+      filename: '[name].html',
+    }),
+  ],
+  module: {
+    rules: [
+      {
+        test: /\.css$/,
+        use: [MiniCssExtractPlugin.loader, 'css-loader'],
+      },
+    ],
+  },
+  output: {
+    publicPath: '/',
+    path: path.resolve(__dirname, '..', 'dist'),
+    filename: '[name].js',
+  },
+};
+
 exports.contentScriptConfig = {
   name: 'content_script',
   target: 'web',

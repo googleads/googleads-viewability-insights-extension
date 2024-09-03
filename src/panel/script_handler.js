@@ -16,8 +16,7 @@
 
 /**
  * @author mbordihn@google.com (Markus Bordihn)
- *
- * @fileoverview Handles all script injections into the webpage and the gpt library.
+ * @file Handles all script injections into the webpage and the gpt library.
  */
 
 import { Toolbar } from './toolbar';
@@ -27,8 +26,8 @@ import { Toolbar } from './toolbar';
  */
 class ScriptHandler {
   /**
-   * @param {string} tabId
-   * @param {string} sessionToken
+   * @param {string} tabId Tab ID
+   * @param {string} sessionToken Session Token for the current session
    * @static
    */
   static injectScript(tabId, sessionToken) {
@@ -47,7 +46,7 @@ class ScriptHandler {
   }
 
   /**
-   * @param {string} tabId
+   * @param {string} tabId Tab ID
    * @static
    */
   static injectStyleSheet(tabId) {
@@ -63,8 +62,8 @@ class ScriptHandler {
   }
 
   /**
-   * @param {string} tabId
-   * @param {string} sessionToken
+   * @param {string} tabId Tab ID
+   * @param {string} sessionToken Session Token
    * @static
    */
   static initScript(tabId, sessionToken) {
@@ -88,7 +87,7 @@ class ScriptHandler {
   }
 
   /**
-   * @param {boolean} enable
+   * @param {boolean} enable Enable Viewable Overlay
    * @static
    */
   static enableViewableOverlay(enable) {
@@ -110,7 +109,7 @@ class ScriptHandler {
   }
 
   /**
-   * @param {string} elementId
+   * @param {string} elementId Element ID to scroll into view
    * @static
    */
   static scrollIntoView(elementId) {

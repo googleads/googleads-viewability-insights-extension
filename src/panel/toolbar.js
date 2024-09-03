@@ -16,18 +16,18 @@
 
 /**
  * @author mbordihn@google.com (Markus Bordihn)
- *
- * @fileoverview Handles all toolbar related action and updates.
+ * @file Handles all toolbar related action and updates.
  */
 
 import { ScriptHandler } from './script_handler';
+import { Report } from './report';
 
 /**
  * @class
  */
 class Toolbar {
   /**
-   * @constructor
+   * @class
    */
   constructor() {
     this.enabled = true;
@@ -48,14 +48,14 @@ class Toolbar {
 
   /**
    * Adds report reference for easier access.
-   * @param {Report} report
+   * @param {Report} report Report instance
    */
   addReportReference(report) {
     this.report = report;
   }
 
   /**
-   * @param {event} event
+   * @param {event} event Event
    */
   reloadPage(event) {
     if (event && chrome.devtools.inspectedWindow.tabId) {
@@ -73,7 +73,7 @@ class Toolbar {
   }
 
   /**
-   * @param {*} event
+   * @param {*} event Event
    */
   showViewableOverlay(event) {
     console.debug('Show Viewable Overlay', event.currentTarget.checked);
@@ -82,7 +82,7 @@ class Toolbar {
 
   /**
    * @static
-   * @return {boolean}
+   * @returns {boolean} Show Viewable Overlay
    */
   static shouldShowViewableOverlay() {
     return document.querySelector('#checkbox-show-viewable-overlay').checked;

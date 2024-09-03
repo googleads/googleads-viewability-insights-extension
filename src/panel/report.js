@@ -16,8 +16,7 @@
 
 /**
  * @author mbordihn@google.com (Markus Bordihn)
- *
- * @fileoverview Handles all report relevant display of data and graphs.
+ * @file Handles all report relevant display of data and graphs.
  */
 
 import { ScriptHandler } from './script_handler';
@@ -53,7 +52,7 @@ const CellName = {
  */
 class Report {
   /**
-   * @constructor
+   * @class
    */
   constructor() {
     this.slotCounter = 0;
@@ -72,12 +71,12 @@ class Report {
   }
 
   /**
-   * @param {*} slot
-   * @return {HTMLElement}
+   * @param {*} slot Slot
+   * @returns {HTMLElement} row
    */
   addSlot(slot) {
     if (!slot) {
-      return;
+      return null;
     }
     if (document.getElementById('row-' + slot.slotElementId)) {
       const existingRow = document.getElementById('row-' + slot.slotElementId);
@@ -150,7 +149,7 @@ class Report {
   }
 
   /**
-   * @param {*} slot
+   * @param {*} slot Slot
    */
   updateSlot(slot) {
     if (!slot) {
@@ -208,7 +207,7 @@ class Report {
   }
 
   /**
-   * @param {Event} event
+   * @param {*} event Event
    */
   scrollIntoView(event) {
     if (event.target && event.target.innerText) {
@@ -217,11 +216,11 @@ class Report {
   }
 
   /**
-   * @param {HTMLElement} row
-   * @param {number} index
-   * @param {string} name
-   * @param {*} value
-   * @param {function?} clickHandler
+   * @param {HTMLElement} row Row
+   * @param {number} index Index
+   * @param {string} name Name
+   * @param {*} value Value
+   * @param {Function?} clickHandler Click handler
    * @private
    */
   insertCell_(row, index, name, value, clickHandler = null) {
