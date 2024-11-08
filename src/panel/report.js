@@ -195,7 +195,8 @@ class Report {
 
     // Update viewable, if needed.
     if (typeof slot.viewable != 'undefined') {
-      if (slot.viewable) {
+      if (slot.viewable || slot.visibility >= 100) {
+        row.classList.remove('predicted-viewable');
         row.classList.add('viewable');
       } else {
         row.classList.remove('viewable');
@@ -203,6 +204,14 @@ class Report {
       row.cells[CellContent.Viewable].innerText = slot.viewable;
       row.cells[CellContent.MinViewability].innerText =
         row.cells[CellContent.CurrentViewability].innerText;
+    } else if (typeof slot.visibility != 'undefined') {
+      if (
+        slot.visibility >= 100 &&
+        row.cells[CellContent.Viewable].innerText !== 'true'
+      ) {
+        row.classList.add('predicted-viewable');
+        row.cells[CellContent.Viewable].innerText = 'unknown';
+      }
     }
   }
 

@@ -18,7 +18,7 @@
 declare const serviceWorkerOption: Record<string, unknown>;
 
 /** Google Publisher Tag (GPT) */
-declare const googletag: any;
+declare let googletag: any;
 
 /** Injected ViewabilityInsights script */
 declare const ViewabilityInsights: any;

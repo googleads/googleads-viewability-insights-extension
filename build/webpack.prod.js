@@ -14,23 +14,47 @@
  * limitations under the License.
  */
 
-const { merge } = require('webpack-merge');
+const {merge} = require('webpack-merge');
 const common = require('./webpack.common.js');
+const TerserPlugin = require('terser-webpack-plugin');
+
+const optimizationOptions = {
+  minimize: true,
+  minimizer: [
+    new TerserPlugin({
+      terserOptions: {
+        compress: {
+          pure_funcs: [
+            'console.log',
+            'console.info',
+            'console.debug',
+            'console.warn'
+          ]
+        },
+      },
+    }),
+  ],
+}
 
 module.exports = [
   merge(common.devtoolsPageConfig, {
     mode: 'production',
+    optimization: optimizationOptions,
   }),
   merge(common.panelPageConfig, {
     mode: 'production',
+    optimization: optimizationOptions,
   }),
   merge(common.contentScriptConfig, {
     mode: 'production',
+    optimization: optimizationOptions,
   }),
   merge(common.adRequestDetailsSidebarConfig, {
     mode: 'production',
+    optimization: optimizationOptions,
   }),
   merge(common.gptIntegrationScriptConfig, {
     mode: 'production',
+    optimization: optimizationOptions,
   }),
 ];

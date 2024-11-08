@@ -71,7 +71,7 @@ class ScriptHandler {
       {
         function: function (token) {
           window.viewabilityInsightsTools = new ViewabilityInsights(token);
-          window.viewabilityInsightsTools.addEventListener();
+          window.viewabilityInsightsTools.addGoogleTagEventListener();
         },
         target: { tabId: tabId },
         args: [sessionToken],

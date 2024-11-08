@@ -16,9 +16,9 @@
 
 .viewability-insights-overlay {
   align-items: center;
-  box-shadow: inset 0px 0px 0px 10px rgba(255, 0, 0, 0.75);
+  box-shadow: inset 0 0 0 10px rgba(255, 0, 0, 0.75);
   display: flex;
-  font-family: Roboto, 'Noto Sans';
+  font-family: Roboto, 'Noto Sans', serif;
   font-size: 16px;
   height: 100%;
   justify-content: center;
@@ -27,7 +27,6 @@
   margin: auto;
   min-height: 20px;
   min-width: 20px;
-  position: absolute;
   position: absolute;
   right: 0;
   top: 0;
@@ -45,8 +44,22 @@
   );
 }
 
+.viewability-insights-overlay.predicted-viewable {
+  box-shadow: inset 0 0 0 10px rgba(255, 165, 0, 0.75);
+}
+
+.viewability-insights-overlay:hover.predicted-viewable {
+  background: repeating-linear-gradient(
+      45deg,
+      rgba(255, 165, 0, 0.2),
+      rgba(255, 165, 0, 0.2) 10px,
+      rgba(255, 165, 0, 0.3) 10px,
+      rgba(255, 165, 0, 0.3) 20px
+  );
+}
+
 .viewability-insights-overlay.viewable {
-  box-shadow: inset 0px 0px 0px 10px rgba(0, 255, 0, 0.75);
+  box-shadow: inset 0 0 0 10px rgba(0, 255, 0, 0.75);
 }
 
 .viewability-insights-overlay:hover.viewable {
@@ -61,6 +74,10 @@
 
 .viewability-insights-overlay > .slot-info {
   background: rgba(255, 0, 0, 0.75);
+}
+
+.viewability-insights-overlay.predicted-viewable > .slot-info {
+  background: rgba(255, 165, 0, 0.75);
 }
 
 .viewability-insights-overlay.viewable > .slot-info {

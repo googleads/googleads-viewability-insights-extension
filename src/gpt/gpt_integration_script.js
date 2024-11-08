@@ -41,7 +41,7 @@ export default class ViewabilityInsights {
   /**
    * Ads the googletag event listener as soon googletag is ready.
    */
-  addEventListener() {
+  addGoogleTagEventListener() {
     window.googletag = window.googletag || { cmd: [] };
     googletag.cmd = googletag.cmd || [];
     googletag.cmd.push(
@@ -53,53 +53,36 @@ export default class ViewabilityInsights {
           value: googletag.getVersion(),
         });
 
-        // All event listener are added with an try and catch to avoid possible edge cases.
-        try {
-          googletag
-            .pubads()
-            .addEventListener(
-              'impressionViewable',
-              this.impressionViewable.bind(this),
-            );
-        } catch (e) {
-          console.debug('Unable to add listener for impressionViewable:', e);
-        }
-        try {
-          googletag
-            .pubads()
-            .addEventListener('slotRequested', this.slotRequested.bind(this));
-        } catch (e) {
-          console.debug('Unable to add listener for slotRequested:', e);
-        }
-        try {
-          googletag
-            .pubads()
-            .addEventListener(
-              'slotVisibilityChanged',
-              this.slotVisibilityChanged.bind(this),
-            );
-        } catch (e) {
-          console.debug('Unable to add listener for slotVisibilityChanged:', e);
-        }
-        try {
-          googletag
-            .pubads()
-            .addEventListener(
-              'slotRenderEnded',
-              this.slotRendererEnded.bind(this),
-            );
-        } catch (e) {
-          console.debug('Unable to add listener for slotRenderEnded:', e);
-        }
-        try {
-          googletag
-            .pubads()
-            .addEventListener('slotOnload', this.slotOnload.bind(this));
-        } catch (e) {
-          console.debug('Unable to add listener for slotOnload:', e);
-        }
+        // All event listener are added with a try and catch to avoid possible edge cases.
+        this.addEventListener(
+          'impressionViewable',
+          this.impressionViewable.bind(this),
+        );
+        this.addEventListener('slotRequested', this.slotRequested.bind(this));
+        this.addEventListener(
+          'slotVisibilityChanged',
+          this.slotVisibilityChanged.bind(this),
+        );
+        this.addEventListener(
+          'slotRenderEnded',
+          this.slotRendererEnded.bind(this),
+        );
+        this.addEventListener('slotOnload', this.slotOnload.bind(this));
       }.bind(this),
     );
+  }
+
+  /**
+   * @param {string} name Event Name
+   * @param {Function} listener Event Listener
+   */
+  addEventListener(name, listener) {
+    try {
+      googletag.pubads().addEventListener(name, listener);
+      console.debug('Added event listener for', name, 'with', listener);
+    } catch (e) {
+      console.error('Unable to add listener for', name, ':', e);
+    }
   }
 
   /**
@@ -109,11 +92,16 @@ export default class ViewabilityInsights {
     this.viewableImpressionCount++;
     const slotElementId = event.slot.getSlotElementId();
     console.debug('Ad Slot', slotElementId, 'is viewable');
-    if (this.showViewableOverlay) {
-      const overlay = this.getOrCreateViewabilityOverlay(slotElementId);
-      if (overlay) {
-        overlay.classList.add('viewable');
+    try {
+      if (this.showViewableOverlay) {
+        const overlay = this.getOrCreateViewabilityOverlay(slotElementId);
+        if (overlay) {
+          overlay.classList.remove('predicted-viewable');
+          overlay.classList.add('viewable');
+        }
       }
+    } catch (e) {
+      console.error('Unable to update viewable overlay:', e);
     }
     window.postMessage({
       type: 'ads-slot-viewable',
@@ -154,6 +142,20 @@ export default class ViewabilityInsights {
       event.inViewPercentage,
       '%',
     );
+    try {
+      if (this.showViewableOverlay) {
+        const overlay = this.getOrCreateViewabilityOverlay(slotElementId);
+        if (
+          overlay &&
+          event.inViewPercentage >= 100 &&
+          !overlay.classList.contains('viewable')
+        ) {
+          overlay.classList.add('predicted-viewable');
+        }
+      }
+    } catch (e) {
+      console.error('Unable to update viewable overlay:', e);
+    }
     window.postMessage({
       type: 'ads-slot-visibility',
       token: this.token,
@@ -162,9 +164,6 @@ export default class ViewabilityInsights {
         visibility: event.inViewPercentage,
       },
     });
-    if (this.showViewableOverlay) {
-      this.getOrCreateViewabilityOverlay(slotElementId);
-    }
   }
 
   /**
@@ -247,24 +246,8 @@ export default class ViewabilityInsights {
     const activeViewContainers = parentElement.getElementsByClassName(
       'GoogleActiveViewInnerContainer',
     );
-    if (activeViewContainers.length == 1) {
+    if (activeViewContainers.length === 1) {
       return activeViewContainers[0];
-    }
-
-    // Alternative check if we could get it from the iFrame Container.
-    const googleAdsIframeContainer = this.getGoogleAdsIframe(parentElement);
-    if (
-      googleAdsIframeContainer &&
-      googleAdsIframeContainer.contentWindow?.document?.body?.getElementsByClassName(
-        'GoogleActiveViewInnerContainer',
-      ) &&
-      googleAdsIframeContainer.contentWindow.document.body.getElementsByClassName(
-        'GoogleActiveViewInnerContainer',
-      ).length == 1
-    ) {
-      return googleAdsIframeContainer.contentWindow.document.body.getElementsByClassName(
-        'GoogleActiveViewInnerContainer',
-      )[0];
     }
 
     return null;
@@ -277,7 +260,7 @@ export default class ViewabilityInsights {
   getGoogleAdsIframeContainer(parentElement) {
     // Early return if we already have the container.
     if (
-      parentElement.tagName == 'DIV' &&
+      parentElement.tagName === 'DIV' &&
       parentElement.id &&
       parentElement.id.startsWith('google_ads_iframe_') &&
       parentElement.id.endsWith('__container__')
@@ -289,7 +272,7 @@ export default class ViewabilityInsights {
     if (parentElement && parentElement.childElementCount > 0) {
       for (const childElement of parentElement.children) {
         if (
-          childElement.tagName == 'DIV' &&
+          childElement.tagName === 'DIV' &&
           childElement.id &&
           childElement.id.startsWith('google_ads_iframe_') &&
           childElement.id.endsWith('__container__')
@@ -308,7 +291,7 @@ export default class ViewabilityInsights {
   getGoogleAdsIframe(parentElement) {
     // Early return if we already have the container.
     if (
-      parentElement.tagName == 'IFRAME' &&
+      parentElement.tagName === 'IFRAME' &&
       parentElement.id &&
       parentElement.id.startsWith('google_ads_iframe_') &&
       !parentElement.id.endsWith('__container__')
@@ -320,7 +303,7 @@ export default class ViewabilityInsights {
     if (parentElement && parentElement.childElementCount > 0) {
       for (const childElement of parentElement.children) {
         if (
-          childElement.tagName == 'IFRAME' &&
+          childElement.tagName === 'IFRAME' &&
           childElement.id &&
           childElement.id.startsWith('google_ads_iframe_') &&
           !childElement.id.endsWith('__container__')
@@ -357,17 +340,21 @@ export default class ViewabilityInsights {
     let height = 1;
 
     // Check if we could use the active view viewability container.
-    const activeViewContainer =
-      this.getGoogleActiveViewInnerContainer(parentElement);
-    if (activeViewContainer) {
-      width = activeViewContainer.clientWidth;
-      height = activeViewContainer.clientHeight;
-      console.debug(
-        'Updating Viewability Overlay',
-        overlayElement,
-        'with Google Active View Inner Container',
-        activeViewContainer,
-      );
+    try {
+      const activeViewContainer =
+        this.getGoogleActiveViewInnerContainer(parentElement);
+      if (activeViewContainer) {
+        width = activeViewContainer.clientWidth;
+        height = activeViewContainer.clientHeight;
+        console.debug(
+          'Updating Viewability Overlay',
+          overlayElement,
+          'with Google Active View Inner Container',
+          activeViewContainer,
+        );
+      }
+    } catch (e) {
+      console.warn('Unable to get Google Active View Inner Container:', e);
     }
 
     // If we could not get the width and height from the active view container we will try to get it over the Iframe container instead.
@@ -398,7 +385,7 @@ export default class ViewabilityInsights {
       if (
         Object.prototype.toString.call(size) === '[object String]' &&
         size.includes(',') &&
-        size != '0,0'
+        size !== '0,0'
       ) {
         const slotSizes = size.split(',');
         if (slotSizes[0] > 0 && slotSizes[1] > 0) {
@@ -407,7 +394,7 @@ export default class ViewabilityInsights {
         }
       } else if (
         Array.isArray(size) &&
-        size.length == 2 &&
+        size.length === 2 &&
         Number.isInteger(size[0]) &&
         Number.isInteger(size[1])
       ) {
@@ -438,6 +425,9 @@ export default class ViewabilityInsights {
     if (height > 1) {
       overlayElement.style.height = height + 'px';
     }
+
+    // Update overlay position.
+    this.updateViewabilityOverlayPosition(overlayElement);
   }
 
   /**
@@ -478,7 +468,9 @@ export default class ViewabilityInsights {
       !googleAdsIframeContainer &&
       window.getComputedStyle(parentElement) &&
       window.getComputedStyle(parentElement).paddingTop &&
-      window.getComputedStyle(parentElement).paddingTop != '0px'
+      window.getComputedStyle(parentElement).paddingTop !== '0' &&
+      window.getComputedStyle(parentElement).paddingTop !== '0px' &&
+      window.getComputedStyle(parentElement).paddingTop !== '0pt'
     ) {
       overlay.style.top = window.getComputedStyle(parentElement).paddingTop;
     }
@@ -495,7 +487,54 @@ export default class ViewabilityInsights {
     // Update overlay size.
     this.updateViewbilityOverlay(overlay, size);
 
+    // Debug message and return newly created overlay.
     return overlay;
+  }
+
+  updateViewabilityOverlayPosition(overlay) {
+    const googleAdsIframeContainer = this.getGoogleAdsIframeContainer(
+      overlay.parentElement,
+    );
+
+    // Check if additional styles needs to be added and adjust the overlay position for safe frame ads.
+    if (
+      googleAdsIframeContainer &&
+      googleAdsIframeContainer.getElementsByTagName('IFRAME').length > 0
+    ) {
+      const iframeElement =
+        googleAdsIframeContainer.getElementsByTagName('IFRAME')[0];
+      if (iframeElement.style['verticalAlign']) {
+        overlay.style['verticalAlign'] = iframeElement.style['verticalAlign'];
+      }
+
+      // For friendly iframe and safe frame ads we need to adjust the overlay position.
+      if (
+        (iframeElement.id &&
+          iframeElement.id.startsWith('google_ads_iframe_')) ||
+        (iframeElement.name &&
+          iframeElement.name.startsWith('google_ads_iframe_')) ||
+        (iframeElement.src &&
+          iframeElement.src.includes('safeframe.googlesyndication.com'))
+      ) {
+        const overlayRect = overlay.getBoundingClientRect();
+        const iframeRect = iframeElement.getBoundingClientRect();
+        if (overlayRect && iframeRect) {
+          if (
+            Math.abs(Math.round(overlayRect.top) - Math.round(iframeRect.top)) >
+            1
+          ) {
+            overlay.style.top = iframeRect.top - overlayRect.top + 'px';
+          }
+          if (
+            Math.abs(
+              Math.round(overlayRect.left) - Math.round(iframeRect.left),
+            ) > 1
+          ) {
+            overlay.style.left = iframeRect.left - overlayRect.left + 'px';
+          }
+        }
+      }
+    }
   }
 
   /**
