@@ -41,7 +41,7 @@ class MessageHandler {
     this.sender = null;
     this.statusbar = null;
     this.tabId = null;
-    this.token = Math.random().toString(36).substring(2);
+    this.token = crypto.randomUUID();
     this.toolbar = null;
   }
 
@@ -82,20 +82,22 @@ class MessageHandler {
    * @see https://developer.chrome.com/docs/extensions/reference/runtime/#event-onConnect
    */
   handleConnect(port) {
-    this.port = port;
-    this.sender = port.sender;
-    this.tabId = this.sender.tab.id;
-
     // Ignore events from other tabs.
-    if (this.tabId != chrome.devtools.inspectedWindow.tabId) {
+    if (
+      !port.sender?.tab?.id ||
+      port.sender?.tab?.id !== chrome.devtools.inspectedWindow.tabId
+    ) {
       return;
     }
 
     // Ignore events from other names.
-    if (port.name != this.connectionName) {
+    if (port.name !== this.connectionName) {
       return;
     }
 
+    this.port = port;
+    this.sender = port.sender;
+    this.tabId = this.sender.tab.id;
     this.connected = false;
 
     // Add Message Listener
@@ -107,7 +109,7 @@ class MessageHandler {
   }
 
   /**
-   * @param {Function} message Callback function for messages.
+   * @param {object} message Callback function for messages.
    * @see https://developer.chrome.com/docs/extensions/reference/runtime/#event-onMessage
    */
   handleMessage(message) {

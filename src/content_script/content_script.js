@@ -71,7 +71,7 @@ class ContentScript {
   }
 
   /**
-   * @param {*} message Message
+   * @param {object} message Message
    */
   handlePortMessage(message) {
     if (message && message.token) {
@@ -124,9 +124,10 @@ class ContentScript {
     if (
       event.source !== window ||
       !event.data ||
-      typeof event.data.token == 'undefined' ||
+      typeof event.data !== 'object' ||
+      !event.data.token ||
       !this.token ||
-      event.data.token != this.token
+      event.data.token !== this.token
     ) {
       return;
     }

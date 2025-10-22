@@ -55,7 +55,7 @@ class Toolbar {
   }
 
   /**
-   * @param {event} event Event
+   * @param {MouseEvent} event Event
    */
   reloadPage(event) {
     if (event && chrome.devtools.inspectedWindow.tabId) {
@@ -73,7 +73,7 @@ class Toolbar {
   }
 
   /**
-   * @param {*} event Event
+   * @param {MouseEvent} event Event
    */
   showViewableOverlay(event) {
     console.debug('Show Viewable Overlay', event.currentTarget.checked);

@@ -65,6 +65,7 @@ export default [
           Object.entries(globals.serviceworker).map(([key]) => [key, 'off']),
         ),
         console: true,
+        crypto: true,
         DEVMODE: false,
         VERSION: false,
         ViewabilityInsights: true,

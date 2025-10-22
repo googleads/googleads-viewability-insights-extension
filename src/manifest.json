@@ -1,7 +1,7 @@
 {
   "name": "Ad Manager Viewability Insights",
   "description": "A DevTools extension for inspecting the viewability of Ad Manager Ads",
-  "version": "0.8.0",
+  "version": "1.1.0",
   "manifest_version": 3,
   "icons": {
     "32": "logo_48px.png"

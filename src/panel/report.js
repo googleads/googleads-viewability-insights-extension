@@ -63,15 +63,17 @@ class Report {
    */
   clear() {
     const reportTable = document.querySelector('#report > tbody');
-    reportTable.parentNode.replaceChild(
-      document.createElement('tbody'),
-      reportTable,
-    );
+    if (reportTable?.parentNode) {
+      reportTable.parentNode.replaceChild(
+        document.createElement('tbody'),
+        reportTable,
+      );
+    }
     this.slotCounter = 0;
   }
 
   /**
-   * @param {*} slot Slot
+   * @param {object} slot Slot
    * @returns {HTMLElement} row
    */
   addSlot(slot) {
@@ -149,7 +151,7 @@ class Report {
   }
 
   /**
-   * @param {*} slot Slot
+   * @param {object} slot Slot
    */
   updateSlot(slot) {
     if (!slot) {
@@ -216,7 +218,7 @@ class Report {
   }
 
   /**
-   * @param {*} event Event
+   * @param {MouseEvent} event Event
    */
   scrollIntoView(event) {
     if (event.target && event.target.innerText) {
@@ -228,8 +230,8 @@ class Report {
    * @param {HTMLElement} row Row
    * @param {number} index Index
    * @param {string} name Name
-   * @param {*} value Value
-   * @param {Function?} clickHandler Click handler
+   * @param {string|number|boolean} value Value
+   * @param {((event: MouseEvent) => void)|null} clickHandler Click handler
    * @private
    */
   insertCell_(row, index, name, value, clickHandler = null) {

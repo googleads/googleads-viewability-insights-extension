@@ -74,7 +74,7 @@ export default class ViewabilityInsights {
 
   /**
    * @param {string} name Event Name
-   * @param {Function} listener Event Listener
+   * @param {(...args: unknown[]) => void} listener Event Listener
    */
   addEventListener(name, listener) {
     try {
@@ -518,19 +518,15 @@ export default class ViewabilityInsights {
       ) {
         const overlayRect = overlay.getBoundingClientRect();
         const iframeRect = iframeElement.getBoundingClientRect();
-        if (overlayRect && iframeRect) {
-          if (
-            Math.abs(Math.round(overlayRect.top) - Math.round(iframeRect.top)) >
-            1
-          ) {
-            overlay.style.top = iframeRect.top - overlayRect.top + 'px';
+        const parentRect = overlay.parentElement.getBoundingClientRect();
+        if (overlayRect && iframeRect && parentRect) {
+          const topDiff = Math.round(iframeRect.top - parentRect.top);
+          const leftDiff = Math.round(iframeRect.left - parentRect.left);
+          if (Math.abs(topDiff) > 1) {
+            overlay.style.top = topDiff + 'px';
           }
-          if (
-            Math.abs(
-              Math.round(overlayRect.left) - Math.round(iframeRect.left),
-            ) > 1
-          ) {
-            overlay.style.left = iframeRect.left - overlayRect.left + 'px';
+          if (Math.abs(leftDiff) > 1) {
+            overlay.style.left = leftDiff + 'px';
           }
         }
       }

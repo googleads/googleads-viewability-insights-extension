@@ -38,6 +38,10 @@ class ScriptHandler {
         world: 'MAIN',
       },
       (injectionResults) => {
+        if (chrome.runtime.lastError) {
+          console.error('Script injection failed:', chrome.runtime.lastError);
+          return;
+        }
         console.log('Inject Script results:', injectionResults);
         ScriptHandler.injectStyleSheet(tabId);
         ScriptHandler.initScript(tabId, sessionToken);
@@ -56,6 +60,10 @@ class ScriptHandler {
         target: { tabId: tabId },
       },
       (injectionResults) => {
+        if (chrome.runtime.lastError) {
+          console.error('CSS injection failed:', chrome.runtime.lastError);
+          return;
+        }
         console.log('Inject StyleSheet results:', injectionResults);
       },
     );
